@@ -1,1 +1,330 @@
-<!doctype html><title>Vaccine policy activity</title><p>Coming soon.</p>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vaccine policy: was the right process followed? · PH3020</title>
+<style>
+  :root {
+    --navy: #002856; --teal: #007298; --tint: #EAF3F7; --orange: #F7941D;
+    --slate: #4F758B; --sky: #71B1C8; --ink: #1F2D36; --light: #CFE4ED;
+    --rust: #B4500A; --warn-bg: #FEF3E6;
+    --head: Cambria, Georgia, "Times New Roman", serif;
+    --body: Calibri, "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  p, li, .text, .box, .feedback, .lead, .v, .verdict, h1, h2 { text-wrap: pretty; }
+  body { overflow-x: hidden; font-family: var(--body); color: var(--ink); background: #F6F9FB; font-size: 17px; line-height: 1.45; -webkit-text-size-adjust: 100%; }
+  header.bar { background: var(--navy); color: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  header.bar img { width: min(300px, 62vw); height: auto; display: block; }
+  header.bar .course { font-size: 12px; letter-spacing: .06em; color: var(--light); text-transform: uppercase; white-space: nowrap; }
+  main { max-width: 820px; margin: 0 auto; padding: 22px 18px 48px; }
+  h1 { font-family: var(--head); color: var(--navy); font-weight: 700; font-size: 28px; line-height: 1.2; margin: 10px 0 14px; }
+  h2 { font-family: var(--head); color: var(--navy); font-size: 23px; line-height: 1.25; margin: 6px 0 8px; }
+  p { margin: 0 0 12px; }
+  .badge { display: inline-block; background: var(--orange); color: #fff; font-weight: 700; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
+  .lead { font-size: 18px; }
+  .muted { color: var(--slate); }
+  .steps { list-style: none; padding: 0; margin: 16px 0 22px; counter-reset: s; }
+  .steps li { counter-increment: s; position: relative; padding: 8px 0 8px 42px; border-bottom: 1px solid var(--light); }
+  .steps li:last-child { border-bottom: 0; }
+  .steps li::before { content: counter(s); position: absolute; left: 0; top: 7px; width: 28px; height: 28px; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+  label.field { display: block; font-weight: 700; color: var(--navy); margin: 6px 0 6px; }
+  input[type=text], textarea, select { font: inherit; color: var(--ink); width: 100%; padding: 11px 12px; border: 1.5px solid #B9CFDA; border-radius: 6px; background: #fff; }
+  textarea { min-height: 84px; resize: vertical; }
+  input:focus, textarea:focus, select:focus { outline: 3px solid var(--sky); outline-offset: 1px; border-color: var(--teal); }
+  .btn { font: inherit; font-weight: 700; border: 0; border-radius: 6px; padding: 13px 22px; cursor: pointer; background: var(--teal); color: #fff; min-height: 48px; }
+  .btn:hover { background: #005f7f; }
+  .btn:disabled { background: #9DB7C4; cursor: not-allowed; }
+  .btn.secondary { background: #fff; color: var(--teal); border: 1.5px solid var(--teal); }
+  .btn.block { width: 100%; }
+  .actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .progress { display: flex; gap: 6px; margin: 2px 0 14px; }
+  .progress span { flex: 1; height: 6px; border-radius: 3px; background: var(--light); }
+  .progress span.done { background: var(--teal); }
+  .progress span.now { background: var(--orange); }
+  .steplabel { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--slate); font-weight: 700; }
+  .card { background: #fff; border: 1.5px solid var(--light); border-radius: 8px; padding: 14px 16px; margin: 0 0 12px; }
+  .card.assigned { border-color: var(--teal); }
+  .order-item { display: flex; align-items: center; gap: 10px; background: #fff; border: 1.5px solid var(--light); border-radius: 8px; padding: 10px 10px 10px 14px; margin-bottom: 10px; }
+  .order-item .pos { flex: 0 0 30px; height: 30px; border-radius: 50%; background: var(--tint); color: var(--navy); font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .order-item .name { flex: 1; font-weight: 700; color: var(--navy); font-size: 18px; }
+  .arrows { display: flex; gap: 6px; }
+  .arrow { font: inherit; width: 46px; height: 46px; border-radius: 6px; border: 1.5px solid var(--teal); background: #fff; color: var(--teal); font-size: 20px; font-weight: 700; cursor: pointer; }
+  .arrow:disabled { border-color: var(--light); color: var(--light); cursor: default; }
+  .card .text { margin-bottom: 10px; }
+  .feedback { margin-top: 16px; padding: 13px 16px; border-radius: 8px; font-weight: 700; display: none; }
+  .feedback.show { display: block; }
+  .feedback.ok { background: var(--tint); color: var(--navy); border-left: 5px solid var(--teal); }
+  .feedback.no { background: var(--warn-bg); color: var(--rust); border-left: 5px solid var(--orange); }
+  .feedback .hint { display: block; font-weight: 400; color: var(--ink); margin-top: 4px; }
+  .compare { margin: 0 0 18px; }
+  .compare .stage { font-family: var(--head); color: var(--navy); font-size: 20px; font-weight: 700; margin: 0 0 8px; }
+  .pair { display: grid; grid-template-columns: 1fr; gap: 10px; }
+  @media (min-width: 680px) { .pair { grid-template-columns: 1fr 1fr; } }
+  .box { border-radius: 8px; padding: 12px 14px; font-size: 16px; }
+  .box .lab { display: block; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+  .box.should { background: var(--tint); border: 1.5px solid var(--light); }
+  .box.should .lab { color: var(--teal); }
+  .box.actual { background: #fff; border: 1.5px solid #D6DEE3; }
+  .box.actual .lab { color: var(--slate); }
+  .divider { border: 0; border-top: 1.5px solid var(--light); margin: 24px 0 18px; }
+  .choice { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .choice button { flex: 1 1 140px; }
+  .choice button.picked { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .summary { background: var(--navy); color: #fff; border-radius: 10px; padding: 24px 22px; margin: 8px 0 18px; }
+  .summary .group { font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--light); font-weight: 700; }
+  .summary .verdict { font-family: var(--head); font-size: 30px; line-height: 1.2; margin: 8px 0 14px; }
+  .summary .row { border-top: 1px solid rgba(255,255,255,.2); padding-top: 12px; margin-top: 12px; }
+  .summary .row .k { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--sky); font-weight: 700; display: block; margin-bottom: 2px; }
+  .summary .row .v { font-size: 19px; }
+  footer { max-width: 820px; margin: 0 auto; padding: 0 18px 30px; font-size: 13px; color: var(--slate); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  footer button { font: inherit; background: none; border: 0; color: var(--slate); text-decoration: underline; cursor: pointer; padding: 0; }
+  .sr { position: absolute; left: -9999px; }
+</style>
+</head>
+<body>
+<header class="bar">
+  <img src="assets/hpu_wordmark_white.png" alt="Hawaiʻi Pacific University">
+  <span class="course">PH3020 · Fall 2026</span>
+</header>
+<main id="app" aria-live="polite"></main>
+<footer>
+  <span>Chapter 8 · Epidemiology and the Policy Arena</span>
+  <button type="button" id="restart">Start over</button>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Content ----------
+  const STAGES = ["Problem definition", "Agenda setting", "Policy establishment", "Policy implementation", "Policy assessment"];
+
+  const SHOULD = [
+    "Ongoing monitoring of U.S. vaccine and disease data identifies a public health concern. Experts analyze the data to define the problem and identify potential solutions.",
+    "Following a standardized and agreed-upon process, the CDC’s panel of independent vaccine experts decides which public health concerns to address and when.",
+    "The CDC’s panel of independent vaccine experts analyzes the scientific data and votes on proposed changes in a public meeting, with input from official medical groups and the public. The CDC director then adopts the expert panel’s recommendations.",
+    "The CDC publishes the updated national vaccine policy. Trusting the open and transparent process, medical groups, healthcare providers, insurers, and states adopt it as the best available science.",
+    "Experts continue monitoring vaccination rates, disease outbreaks, and vaccine safety data to determine whether the new policy is working, having no effect, or causing harm. These findings inform the next cycle of policy development."
+  ];
+
+  const ACTUAL = [
+    "Kennedy first decided that U.S. vaccine policy should be changed to recommend fewer childhood vaccines. Ongoing monitoring of U.S. vaccine and disease data had produced no data showing a problem for experts to investigate.",
+    "Kennedy first removed all 17 independent vaccine experts from the panel and replaced them with individuals of his choosing. The new panel then put a review of the childhood vaccine schedule on its agenda.",
+    "The CDC’s acting director adopted a new vaccine schedule developed by federal officials. The expert panel did not analyze the data or vote on the changes. Routine childhood immunizations were dropped from 17 diseases to 11.",
+    "Major medical groups rejected the new policy and published their own vaccine recommendations. A majority of states chose to follow those instead of the national vaccine policy. A federal judge then paused the new national vaccine policy.",
+    "The CDC paused many of its routine systems for monitoring vaccination rates, hampering the ability to assess whether the new policy was working, having no effect, or causing harm."
+  ];
+
+  const KEY = "ph3020-vaccine-policy-v1";
+  const HINT_AFTER = 2; // wrong tries before showing how many are in the right place
+
+  // ---------- Helpers ----------
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function shuffledNotSolved(n) {
+    let a; const id = [...Array(n).keys()];
+    do { a = shuffle(id); } while (a.every((v, i) => v === i));
+    return a;
+  }
+  function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+  function fresh() {
+    return {
+      screen: "intro", group: "",
+      order: shuffledNotSolved(5), orderTries: 0, orderDone: false,
+      shouldCards: shuffle([0, 1, 2, 3, 4]), shouldPick: {}, shouldTries: 0, shouldDone: false,
+      actualCards: shuffle([0, 1, 2, 3, 4]), actualPick: {}, actualTries: 0, actualDone: false,
+      verdict: "", worst: "", why: ""
+    };
+  }
+
+  let S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch (e) { S = fresh(); }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+  const app = document.getElementById("app");
+  const SCREENS = ["intro", "order", "should", "actual", "compare", "done"];
+
+  function progress(stepNo) {
+    let h = '<div class="progress" aria-hidden="true">';
+    for (let i = 1; i <= 4; i++) h += '<span class="' + (i < stepNo ? "done" : i === stepNo ? "now" : "") + '"></span>';
+    return h + '</div><div class="steplabel">Step ' + stepNo + ' of 4</div>';
+  }
+
+  function go(screen) { S.screen = screen; save(); render(); window.scrollTo(0, 0); }
+
+  // ---------- Screens ----------
+  function renderIntro() {
+    app.innerHTML =
+      '<span class="badge">In-class activity · Chapter 8</span>' +
+      '<h1>Recent vaccine policy changes: was the right process followed?</h1>' +
+      '<p class="lead">Your group will use the policy cycle to compare how national vaccine policy <em>should</em> be made with how the 2025–26 changes to the U.S. childhood vaccine schedule were <em>actually</em> made.</p>' +
+      '<ol class="steps">' +
+        '<li>Put the five stages of the policy cycle in order.</li>' +
+        '<li>Match each “what should happen” card to its stage.</li>' +
+        '<li>Match each “what actually happened” card to its stage.</li>' +
+        '<li>Compare the two, and decide whether the right process was followed.</li>' +
+      '</ol>' +
+      '<p class="muted">When you check an answer, the app tells you only whether it’s right, not what to change. Talk it through as a group before you check.</p>' +
+      '<label class="field" for="g">Group name</label>' +
+      '<input type="text" id="g" maxlength="40" autocomplete="off" placeholder="For example, the names in your group" value="' + esc(S.group) + '">' +
+      '<div class="actions"><button class="btn block" id="start">Start</button></div>';
+    const g = document.getElementById("g");
+    g.addEventListener("input", () => { S.group = g.value; save(); });
+    document.getElementById("start").onclick = () => { S.group = g.value.trim(); go("order"); };
+  }
+
+  function feedbackHTML(id) { return '<div class="feedback" id="' + id + '" role="status"></div>'; }
+  function showFeedback(id, ok, msg, hint) {
+    const f = document.getElementById(id);
+    f.className = "feedback show " + (ok ? "ok" : "no");
+    f.innerHTML = esc(msg) + (hint ? '<span class="hint">' + esc(hint) + '</span>' : "");
+  }
+
+  function renderOrder() {
+    let h = progress(1) +
+      '<h2>Put the policy cycle in order</h2>' +
+      '<p>Use the arrows to arrange the five stages from first to last.</p>';
+    S.order.forEach((stage, i) => {
+      h += '<div class="order-item"><span class="pos">' + (i + 1) + '</span><span class="name">' + STAGES[stage] + '</span>' +
+        '<span class="arrows"><button class="arrow" data-up="' + i + '" aria-label="Move ' + STAGES[stage] + ' up"' + (i === 0 || S.orderDone ? " disabled" : "") + '>↑</button>' +
+        '<button class="arrow" data-down="' + i + '" aria-label="Move ' + STAGES[stage] + ' down"' + (i === 4 || S.orderDone ? " disabled" : "") + '>↓</button></span></div>';
+    });
+    h += feedbackHTML("fb") + '<div class="actions">' +
+      (S.orderDone ? '<button class="btn block" id="next">Continue to step 2</button>' : '<button class="btn block" id="check">Check our order</button>') + '</div>';
+    app.innerHTML = h;
+    app.querySelectorAll("[data-up]").forEach(b => b.onclick = () => { const i = +b.dataset.up; [S.order[i - 1], S.order[i]] = [S.order[i], S.order[i - 1]]; save(); renderOrder(); });
+    app.querySelectorAll("[data-down]").forEach(b => b.onclick = () => { const i = +b.dataset.down; [S.order[i + 1], S.order[i]] = [S.order[i], S.order[i + 1]]; save(); renderOrder(); });
+    if (S.orderDone) {
+      showFeedback("fb", true, "Correct! That’s the policy cycle.");
+      document.getElementById("next").onclick = () => go("should");
+    } else {
+      document.getElementById("check").onclick = () => {
+        const right = S.order.filter((v, i) => v === i).length;
+        if (right === 5) { S.orderDone = true; save(); renderOrder(); return; }
+        S.orderTries++; save();
+        showFeedback("fb", false, "Not quite. Talk it over and try again.",
+          S.orderTries >= HINT_AFTER ? "Hint: " + right + " of 5 stages are in the right place." : "");
+      };
+    }
+  }
+
+  function renderMatch(kind) {
+    const isShould = kind === "should";
+    const TEXT = isShould ? SHOULD : ACTUAL;
+    const cards = S[kind + "Cards"], pick = S[kind + "Pick"], done = S[kind + "Done"];
+    const stepNo = isShould ? 2 : 3;
+    let h = progress(stepNo) +
+      '<h2>' + (isShould ? "What should happen" : "What actually happened") + '</h2>' +
+      '<p>' + (isShould
+        ? "Each card describes how national vaccine policy should be made at one stage of the policy cycle. Choose the stage that matches each card."
+        : "Each card describes what actually happened during the 2025–26 changes to the U.S. childhood vaccine schedule. Choose the stage that matches each card.") +
+      ' Use each stage once.</p>';
+    cards.forEach((c, n) => {
+      const val = pick[c] === undefined ? "" : String(pick[c]);
+      h += '<div class="card' + (val !== "" ? " assigned" : "") + '"><div class="text">' + TEXT[c] + '</div>' +
+        '<label class="sr" for="sel' + n + '">Stage for card ' + (n + 1) + '</label>' +
+        '<select id="sel' + n + '" data-card="' + c + '"' + (done ? " disabled" : "") + '><option value="">Choose a stage…</option>' +
+        STAGES.map((s, i) => '<option value="' + i + '"' + (val === String(i) ? " selected" : "") + '>' + (i + 1) + '. ' + s + '</option>').join("") +
+        '</select></div>';
+    });
+    h += feedbackHTML("fb") + '<div class="actions">' +
+      (done ? '<button class="btn block" id="next">Continue to step ' + (stepNo + 1) + '</button>' : '<button class="btn block" id="check">Check our matches</button>') + '</div>';
+    app.innerHTML = h;
+
+    app.querySelectorAll("select").forEach(sel => sel.onchange = () => {
+      const c = +sel.dataset.card;
+      if (sel.value === "") delete pick[c]; else pick[c] = +sel.value;
+      save();
+      sel.closest(".card").classList.toggle("assigned", sel.value !== "");
+      document.getElementById("fb").className = "feedback";
+    });
+
+    if (done) {
+      showFeedback("fb", true, "Correct! Every card is matched to the right stage.");
+      document.getElementById("next").onclick = () => go(isShould ? "actual" : "compare");
+      return;
+    }
+    document.getElementById("check").onclick = () => {
+      const vals = cards.map(c => pick[c]);
+      if (vals.some(v => v === undefined)) { showFeedback("fb", false, "Choose a stage for every card first."); return; }
+      if (new Set(vals).size < 5) { showFeedback("fb", false, "Each stage can be used only once. Check for a stage you chose twice."); return; }
+      const right = cards.filter(c => pick[c] === c).length;
+      if (right === 5) { S[kind + "Done"] = true; save(); renderMatch(kind); return; }
+      S[kind + "Tries"]++; save();
+      showFeedback("fb", false, "Not quite. Talk it over and try again.",
+        S[kind + "Tries"] >= HINT_AFTER ? "Hint: " + right + " of 5 cards are in the right place." : "");
+    };
+  }
+
+  function renderCompare() {
+    let h = progress(4) +
+      '<h2>Compare: was the right process followed?</h2>' +
+      '<p>For each stage, read what should happen next to what actually happened. Then decide as a group.</p>';
+    STAGES.forEach((s, i) => {
+      h += '<div class="compare"><div class="stage">' + (i + 1) + '. ' + s + '</div><div class="pair">' +
+        '<div class="box should"><span class="lab">What should happen</span>' + SHOULD[i] + '</div>' +
+        '<div class="box actual"><span class="lab">What actually happened</span>' + ACTUAL[i] + '</div></div></div>';
+    });
+    h += '<hr class="divider">' +
+      '<label class="field">Overall, did the 2025–26 changes follow the policy cycle?</label>' +
+      '<div class="choice"><button class="btn secondary' + (S.verdict === "Yes" ? " picked" : "") + '" data-v="Yes">Yes, they did</button>' +
+      '<button class="btn secondary' + (S.verdict === "No" ? " picked" : "") + '" data-v="No">No, they didn’t</button></div>' +
+      '<label class="field" for="worst">Which stage was the biggest departure from what should happen?</label>' +
+      '<select id="worst"><option value="">Choose a stage…</option>' +
+      STAGES.map((s, i) => '<option value="' + s + '"' + (S.worst === s ? " selected" : "") + '>' + (i + 1) + '. ' + s + '</option>').join("") + '</select>' +
+      '<label class="field" for="why" style="margin-top:14px">Why? Explain in one or two sentences.</label>' +
+      '<textarea id="why" maxlength="400">' + esc(S.why) + '</textarea>' +
+      feedbackHTML("fb") +
+      '<div class="actions"><button class="btn block" id="finish">Submit our verdict</button></div>';
+    app.innerHTML = h;
+    app.querySelectorAll("[data-v]").forEach(b => b.onclick = () => {
+      S.verdict = b.dataset.v; save();
+      app.querySelectorAll("[data-v]").forEach(x => x.classList.toggle("picked", x === b));
+    });
+    document.getElementById("worst").onchange = e => { S.worst = e.target.value; save(); };
+    document.getElementById("why").oninput = e => { S.why = e.target.value; save(); };
+    document.getElementById("finish").onclick = () => {
+      if (!S.verdict || !S.worst || !S.why.trim()) { showFeedback("fb", false, "Answer all three questions before you submit."); return; }
+      go("done");
+    };
+  }
+
+  function renderDone() {
+    app.innerHTML =
+      '<span class="badge">Your group’s verdict</span>' +
+      '<div class="summary">' +
+        '<div class="group">' + esc(S.group || "Our group") + '</div>' +
+        '<div class="verdict">' + (S.verdict === "Yes" ? "The right process was followed." : "The right process was not followed.") + '</div>' +
+        '<div class="row"><span class="k">Biggest departure</span><span class="v">' + esc(S.worst) + '</span></div>' +
+        '<div class="row"><span class="k">Why</span><span class="v">' + esc(S.why) + '</span></div>' +
+      '</div>' +
+      '<p class="lead">Keep this screen open. Be ready to share your verdict and your reasoning with the class.</p>' +
+      '<div class="actions"><button class="btn secondary" id="back">Back to the comparison</button></div>';
+    document.getElementById("back").onclick = () => go("compare");
+  }
+
+  function render() {
+    const s = SCREENS.includes(S.screen) ? S.screen : "intro";
+    // don't let a refresh skip ahead past an unfinished step
+    if (s === "should" && !S.orderDone) return go("order");
+    if (s === "actual" && !S.shouldDone) return go("should");
+    if ((s === "compare" || s === "done") && !S.actualDone) return go("actual");
+    ({ intro: renderIntro, order: renderOrder, should: () => renderMatch("should"), actual: () => renderMatch("actual"), compare: renderCompare, done: renderDone })[s]();
+  }
+
+  document.getElementById("restart").onclick = () => {
+    if (confirm("Start the activity over? Your group’s answers will be cleared.")) { S = fresh(); save(); render(); window.scrollTo(0, 0); }
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
