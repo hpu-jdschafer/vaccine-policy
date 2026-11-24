@@ -45,9 +45,10 @@
   .canvas { max-width: 1720px; margin: 0 auto; padding: 12px 22px 40px; }
   .lead h1 { font-family: var(--head); color: var(--navy); font-size: 22px; margin: 0 0 3px; }
   .lead p { margin: 0 0 12px; font-size: 15.5px; max-width: 1180px; }
-  .lead .hint { color: var(--muted); }
+  .lead .hint { color: var(--muted); display: block; }
 
-  .table { display: grid; grid-template-columns: 24px 150px 26px minmax(0,1fr) 26px minmax(0,1fr) 30px minmax(0,1fr); align-items: start; }
+  .table { display: grid; grid-template-columns: 24px 150px 26px minmax(0,1fr) 26px minmax(0,1fr) 30px minmax(0,1fr); align-items: start; transition: grid-template-columns .3s ease; }
+  .table.compact { grid-template-columns: 24px 150px 26px minmax(0,1fr) 26px minmax(0,1fr) 24px 196px; }
   .table > #pile + .checkbar { margin-top: 0; }
   .table.eval { grid-template-columns: 24px 150px 26px minmax(0,1fr) 26px minmax(0,1fr) 24px 196px; }
   .board { grid-column: 1 / 8; grid-row: 1; display: grid; grid-template-columns: subgrid; position: relative; }
@@ -113,7 +114,7 @@
   #pile { grid-column: 8; grid-row: 1; position: sticky; top: calc(var(--hdr) + 10px); max-height: calc(100vh - var(--hdr) - 86px); overflow-y: auto; overscroll-behavior: contain;
           display: flex; flex-wrap: wrap; align-items: flex-start; align-content: flex-start; gap: 12px; padding: 8px 6px 18px; margin: -8px -8px 0; border-radius: 14px; border: 2px dashed transparent; min-height: 220px; scrollbar-width: thin; transition: border-color .12s, background .12s; }
   #pile.receptive { border-color: #8FA6B3; background: rgba(255,255,255,.45); }
-  #pile.receptive.empty::before { content: "Drop a card here to take it off the board"; margin: auto; padding-top: 80px; color: var(--muted); font-size: 14.5px; }
+  #pile.receptive.empty::before { content: "Drop a card here to take it off the board"; margin: auto; padding-top: 80px; color: var(--muted); font-size: 14.5px; text-align: center; }
   #pile.over { background: rgba(79,163,196,.14); border-color: #4FA3C4; }
 
   /* ---------- Check button ---------- */
@@ -146,7 +147,7 @@
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   @media (max-width: 1100px) {
     .table { grid-template-columns: 22px 128px 18px minmax(0,1fr) 18px minmax(0,1fr) 20px minmax(0,1fr); }
-    .table.eval { grid-template-columns: 22px 128px 18px minmax(0,1fr) 18px minmax(0,1fr) 16px 160px; }
+    .table.eval, .table.compact { grid-template-columns: 22px 128px 18px minmax(0,1fr) 18px minmax(0,1fr) 16px 160px; }
     .card.p { width: 128px; }
   }
 </style>
@@ -183,7 +184,7 @@
     "Kennedy first removed all 17 independent vaccine experts from the panel and replaced them with individuals of his choosing. The new panel then placed a review of the childhood vaccine schedule on its agenda.",
     "The CDC’s acting director adopted a new vaccine schedule developed by federal officials without a review or vote by the expert panel. Routine childhood immunizations were dropped from 17 diseases to 11.",
     "Major medical groups rejected the new policy and published their own vaccine recommendations. A majority of states chose to follow alternative recommendations instead of the national vaccine policy. A federal judge then paused the new policy.",
-    "The CDC paused many of its routine systems for monitoring vaccination rates, making it difficult to assess whether the new policy was working, having no effect, or causing harm."
+    "The CDC stopped updating many of its databases used to monitor vaccination rates, making it difficult to assess whether the new policy was working, having no effect, or causing harm."
   ];
 
   const FLOWS = ["p", "s", "a"];
@@ -262,7 +263,7 @@
     const ev = S.phase === "eval";
     let h = '<section class="lead">' + (ev
       ? '<h1>Compare the process</h1><p>Compare what should happen with what actually happened at each stage. As a group, decide whether the proper process was followed.</p>'
-      : '<h1>Build the policy cycle</h1><p>Arrange the cards to build three parallel flows. Match what should happen and what actually happened to each stage of the policy cycle. When all 15 cards are in place, check your work. <span class="hint">Drag a card into place, or click a card and then click its destination.</span></p>') + '</section>';
+      : '<h1>Build the policy cycle</h1><p>Arrange the five stages of the policy cycle in order. Match what should happen and what actually happened to each stage. When all 15 cards are in place, check your work. <span class="hint">Drag a card into place, or click a card and then click its destination.</span></p>') + '</section>';
     h += '<div class="table' + (ev ? " eval" : "") + '"><div class="board" id="board">';
     if (!ev) FLOWS.forEach(c => { h += '<div class="flowbox" data-flow="' + c + '" style="grid-column:' + GCOL[c] + '"></div>'; });
     FLOWS.forEach(c => { h += '<div class="fhead ' + c + '" style="grid-column:' + GCOL[c] + '"><div class="t">' + svg(16, IC[c], 2.4) + NAME[c] + '</div>' + (ev ? "" : '<div class="st" data-st="' + c + '"></div>') + '</div>'; });
@@ -329,6 +330,7 @@
       if (want.join() !== have.join()) want.forEach(id => pile.appendChild(cards[id]));
       want.forEach(id => cards[id].style.setProperty("--tilt", S.tilt[id] + "deg"));
       pile.classList.toggle("empty", want.length === 0);
+      const tbl = pile.parentElement; if (tbl) tbl.classList.toggle("compact", want.length === 0);
     }
     Object.keys(cards).forEach(id => {
       const el = cards[id], locked = S.locked[catOf(id)] || S.phase === "eval";
@@ -515,8 +517,8 @@
     g.setAttribute("viewBox", "0 0 " + b.width + " " + b.height);
     g.innerHTML = '<path d="' + d + '" fill="none" stroke="#5B7584" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' +
       '<path d="M' + (xL - 11) + ' ' + (y0 - 6) + ' L' + (xL - 3) + ' ' + y0 + ' L' + (xL - 11) + ' ' + (y0 + 6) + '" fill="none" stroke="#5B7584" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<rect x="' + (gx - 7) + '" y="' + (my - 40) + '" width="14" height="80" fill="#E9EEF1"/>' +
-      '<text x="' + gx + '" y="' + my + '" transform="rotate(-90 ' + gx + ' ' + my + ')" text-anchor="middle" dominant-baseline="central" font-family="Calibri, Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B7584" letter-spacing=".04em">REPEATS</text>';
+      '<rect x="' + (gx - 8) + '" y="' + (my - 50) + '" width="16" height="100" fill="#E9EEF1"/>' +
+      '<text x="' + gx + '" y="' + my + '" transform="rotate(-90 ' + gx + ' ' + my + ')" text-anchor="middle" dominant-baseline="central" font-family="Calibri, Segoe UI, Arial, sans-serif" font-size="12.5" font-weight="700" fill="#5B7584">Cycle repeats</text>';
   }
   let ro = null;
   function observeBoard() {
