@@ -3,174 +3,204 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Policy cycle activity · PH3020</title>
+<title>The policy cycle · PH3020</title>
 <style>
   :root {
-    --navy: #002856; --teal: #007298; --orange: #F7941D; --rust: #B4500A;
-    --ink: #1F2D36; --slate: #4F758B; --sky: #71B1C8;
-    --table: #E8EDF0; --line: #A9BBC6;
-    --s-bg: #FFFFFF; --s-bar: #007298;
-    --a-bg: #FFF3E3; --a-bar: #D9761A;
+    --navy: #002856; --ink: #1F2D36; --muted: #4F6573; --table: #E9EEF1;
+    --orange: #F7941D;
+    /* card families */
+    --p: #002856; --p-bg: #E4EBF4; --p-zone: rgba(0,40,86,.05); --p-line: rgba(0,40,86,.38);
+    --s: #0B7A97; --s-head: #00627F; --s-bg: #FFFFFF; --s-zone: rgba(11,122,151,.07); --s-line: rgba(11,122,151,.55);
+    --a: #D06D12; --a-head: #9C4705; --a-bg: #FFF3E4; --a-zone: rgba(208,109,18,.08); --a-line: rgba(208,109,18,.6);
+    --arrow: #5B7584;
     --head: Cambria, Georgia, "Times New Roman", serif;
     --body: Calibri, "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
-    --hdr: 50px;
+    --hdr: 46px;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body { font-family: var(--body); color: var(--ink); background: var(--table); font-size: 15px; line-height: 1.4; }
+  body { font-family: var(--body); color: var(--ink); background: var(--table); font-size: 15.5px; line-height: 1.4; }
   p, .ctext, textarea { text-wrap: pretty; }
   button { font: inherit; }
-  :focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+  :focus-visible { outline: 3px solid #4FA3C4; outline-offset: 2px; }
 
   /* ---------- Header ---------- */
-  header { position: sticky; top: 0; z-index: 50; height: var(--hdr); background: var(--navy); color: #fff; display: flex; align-items: center; gap: 16px; padding: 0 24px; box-shadow: 0 1px 6px rgba(0,0,0,.18); }
-  header img { height: 13px; width: auto; display: block; }
-  header .sep { width: 1px; height: 20px; background: rgba(255,255,255,.25); }
-  header .title { font-family: var(--head); font-weight: 700; font-size: 16px; white-space: nowrap; }
-  header .right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
-  #check { border: 0; border-radius: 999px; padding: 8px 20px; font-weight: 700; font-size: 15px; background: var(--orange); color: #fff; cursor: pointer; }
-  #check:hover:not(:disabled) { background: #E2820F; }
-  #check:disabled { background: rgba(255,255,255,.14); color: rgba(255,255,255,.55); cursor: not-allowed; }
-  #check.ready { animation: nudge 1.6s ease-in-out 2; }
-  @keyframes nudge { 0%,100% { box-shadow: 0 0 0 0 rgba(247,148,29,0); } 50% { box-shadow: 0 0 0 7px rgba(247,148,29,.35); } }
-  #reset { background: none; border: 0; color: #BFD4DE; font-size: 13px; text-decoration: underline; cursor: pointer; padding: 0; }
+  header { position: sticky; top: 0; z-index: 50; height: var(--hdr); background: var(--navy); color: #fff; display: flex; align-items: center; gap: 14px; padding: 0 22px; }
+  header img { height: 12px; width: auto; display: block; }
+  header .sep { width: 1px; height: 18px; background: rgba(255,255,255,.28); }
+  header .course { font-size: 14px; color: #DCE7EE; letter-spacing: .02em; }
+  #reset { margin-left: auto; background: none; border: 0; color: #BFD3DE; font-size: 13.5px; text-decoration: underline; cursor: pointer; padding: 4px 0; }
+  #reset:hover { color: #fff; }
 
-  /* ---------- Canvas ---------- */
-  .canvas { max-width: 1720px; margin: 0 auto; padding: 22px 28px 48px; }
-  .intro { max-width: 1040px; margin: 0 0 18px; }
-  .intro h1 { font-family: var(--head); color: var(--navy); font-size: 27px; line-height: 1.2; margin: 0 0 8px; }
-  .intro p { margin: 0 0 6px; font-size: 16.5px; }
-  .intro .how { margin-top: 10px; font-size: 15px; color: var(--slate); }
+  /* ---------- Intro ---------- */
+  .intro { max-width: 760px; margin: 9vh auto 40px; padding: 38px 44px 40px; background: #fff; border-radius: 16px; box-shadow: 0 2px 4px rgba(0,40,86,.06), 0 12px 30px rgba(0,40,86,.08); }
+  .intro h1 { font-family: var(--head); color: var(--navy); font-size: 32px; line-height: 1.2; margin: 0 0 16px; }
+  .intro p { font-size: 18px; margin: 0 0 14px; }
+  .btn { border: 0; border-radius: 999px; padding: 11px 30px; font-weight: 700; font-size: 16.5px; background: var(--orange); color: #fff; cursor: pointer; box-shadow: 0 2px 8px rgba(160,80,0,.25); }
+  .btn:hover:not(:disabled) { background: #E2820F; }
+  .btn:disabled { background: #B8C6CF; color: #fff; box-shadow: none; cursor: not-allowed; }
+  .intro .btn { margin-top: 10px; }
 
-  .table { display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 30px; align-items: start; }
-  .table.no-pile { grid-template-columns: minmax(0, 1fr); }
+  /* ---------- Activity ---------- */
+  .canvas { max-width: 1720px; margin: 0 auto; padding: 12px 22px 40px; }
+  .lead h1 { font-family: var(--head); color: var(--navy); font-size: 22px; margin: 0 0 3px; }
+  .lead p { margin: 0 0 12px; font-size: 15.5px; max-width: 1180px; }
+  .lead .hint { color: var(--muted); }
 
-  /* ---------- Board ---------- */
-  .board { position: relative; display: grid; column-gap: 0; row-gap: 0; }
-  .board.three { grid-template-columns: 46px 190px 40px minmax(0, 1fr) 40px minmax(0, 1fr); }
-  .board.four  { grid-template-columns: 46px 190px 40px minmax(0, 1fr) 40px minmax(0, 1fr) 28px 178px; }
-  .flowbox { grid-row: 1 / 11; margin: -10px -10px -12px; border-radius: 16px; transition: box-shadow .25s, background .25s; pointer-events: none; }
-  .flowbox.checking { box-shadow: 0 0 0 3px var(--sky); background: rgba(113,177,200,.08); }
-  .flowbox.attention { box-shadow: 0 0 0 3px var(--orange); background: rgba(247,148,29,.07); }
-  .flowbox.correct { background: rgba(0,114,152,.06); }
-  .fhead { padding: 0 2px 12px; position: relative; z-index: 1; }
-  .fhead .t { display: flex; align-items: center; gap: 7px; font-family: var(--head); font-weight: 700; font-size: 17px; color: var(--navy); line-height: 1.2; }
-  .fhead .st { min-height: 20px; margin-top: 3px; font-size: 14px; font-weight: 700; }
-  .fhead .st.no { color: var(--rust); }
-  .fhead .st.ok { color: var(--teal); }
-  .fhead .st.wait { color: var(--slate); font-weight: 400; font-style: italic; }
-  .fhead .st.eval { color: var(--slate); font-weight: 400; }
+  .table { display: grid; grid-template-columns: 24px 150px 26px minmax(0,1fr) 26px minmax(0,1fr) 30px minmax(0,1fr); align-items: start; }
+  .table > #pile + .checkbar { margin-top: 0; }
+  .table.eval { grid-template-columns: 24px 150px 26px minmax(0,1fr) 26px minmax(0,1fr) 24px 196px; }
+  .board { grid-column: 1 / 8; grid-row: 1; display: grid; grid-template-columns: subgrid; position: relative; }
+  .table.eval .board { grid-column: 1 / -1; }
 
-  .slot { position: relative; z-index: 1; min-height: 112px; border: 2px dashed var(--line); border-radius: 10px; background: rgba(255,255,255,.4); display: flex; transition: border-color .12s, background .12s, box-shadow .12s, opacity .12s; }
-  .slot.filled { border-color: transparent; background: transparent; }
-  .slot.can-drop { border-color: var(--teal); background: rgba(255,255,255,.7); }
-  .slot.over { border: 2px solid var(--teal); background: rgba(0,114,152,.1); box-shadow: 0 0 0 4px rgba(113,177,200,.4); }
-  .slot.no-drop { opacity: .4; }
-  .slot.select-target { border-color: var(--teal); cursor: pointer; background: rgba(255,255,255,.75); }
-  .slot.filled.select-target { box-shadow: 0 0 0 3px var(--sky); }
-  .num { grid-column: 1; align-self: start; justify-self: end; margin: 10px 10px 0 0; width: 24px; height: 24px; border-radius: 50%; background: #fff; color: var(--slate); border: 1.5px solid var(--line); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; }
-  .conn { align-self: center; height: 0; border-top: 2px dotted var(--line); margin: 0 6px; position: relative; z-index: 1; }
-  .arw { display: flex; justify-content: center; align-items: center; height: 38px; position: relative; z-index: 1; color: #8FA6B3; }
-  .arw svg { width: 16px; height: 26px; }
-  #cyc { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
+  .flowbox { grid-row: 1 / 11; margin: -6px -8px -8px; border-radius: 14px; pointer-events: none; transition: box-shadow .2s, background .2s; }
+  .flowbox.checking { box-shadow: 0 0 0 3px #7DBAD2; background: rgba(125,186,210,.10); }
+  .flowbox.no { box-shadow: 0 0 0 3px var(--orange); background: rgba(247,148,29,.07); }
 
-  /* Yes / No */
-  .yn { align-self: center; display: flex; gap: 8px; position: relative; z-index: 1; }
-  .yn button { flex: 1; border: 1.5px solid #9DB3C0; background: #fff; color: var(--ink); border-radius: 999px; padding: 10px 0; font-weight: 700; cursor: pointer; }
-  .yn button:hover { border-color: var(--ink); }
-  .yn button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .fhead { grid-row: 1; padding: 0 0 10px; position: relative; z-index: 1; min-height: 46px; }
+  .fhead .t { display: flex; align-items: center; gap: 7px; font-family: var(--head); font-weight: 700; font-size: 17px; line-height: 1.2; }
+  .fhead.p .t { color: var(--p); } .fhead.s .t { color: var(--s-head); } .fhead.a .t { color: var(--a-head); } .fhead.e .t { color: var(--ink); }
+  .fhead .st { font-size: 14px; font-weight: 700; min-height: 19px; margin-top: 2px; }
+  .fhead .st.no { color: #A44A00; } .fhead .st.ok { color: #0A6B52; } .fhead .st.wait { color: var(--muted); font-weight: 400; font-style: italic; }
+
+  /* slots (empty spots on the board) */
+  .slot { position: relative; z-index: 1; display: flex; transition: box-shadow .12s, background .12s, opacity .12s, border-color .12s; }
+  .slot.p { align-self: center; height: 48px; border-radius: 24px; border: 2px dashed var(--p-line); background: var(--p-zone); }
+  .slot.s, .slot.a { min-height: 80px; border: 2px dashed var(--s-line); background: var(--s-zone); }
+  .slot.s { border-radius: 12px; }
+  .slot.a { border-radius: 3px; border-color: var(--a-line); background: var(--a-zone); }
+  .slot .ghosticon { margin: auto; opacity: .35; }
+  .slot.p .ghosticon { color: var(--p); } .slot.s .ghosticon { color: var(--s); } .slot.a .ghosticon { color: var(--a); }
+  .slot.filled { border: 0; background: transparent; }
+  .slot.filled .ghosticon { display: none; }
+  .slot.can-drop { opacity: 1; }
+  .slot.can-drop.p, .slot.target.p { border-style: solid; background: rgba(0,40,86,.10); }
+  .slot.can-drop.s, .slot.target.s { border-style: solid; background: rgba(11,122,151,.12); }
+  .slot.can-drop.a, .slot.target.a { border-style: solid; background: rgba(208,109,18,.13); }
+  .slot.over { box-shadow: 0 0 0 4px rgba(79,163,196,.55); }
+  .slot.no-drop { opacity: .35; }
+  .slot.target { cursor: pointer; }
+  .slot.filled.target { box-shadow: 0 0 0 3px rgba(79,163,196,.7); }
+  .num { position: absolute; left: -10px; top: -9px; z-index: 3; width: 21px; height: 21px; border-radius: 50%; background: #fff; border: 1.5px solid var(--p-line); color: var(--p); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .conn { align-self: center; height: 0; border-top: 2px dotted #B6C4CD; margin: 0 4px; position: relative; z-index: 1; }
+  .arw { height: 24px; display: flex; justify-content: center; align-items: center; color: var(--arrow); position: relative; z-index: 1; }
+  .arw svg { width: 14px; height: 22px; display: block; }
+  #cyc { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 0; }
 
   /* ---------- Cards ---------- */
-  .card { position: relative; width: 100%; border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 2px rgba(0,40,86,.16), 0 4px 12px rgba(0,40,86,.12); cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; transition: box-shadow .15s, transform .15s, opacity .15s; }
-  .card:hover { box-shadow: 0 2px 4px rgba(0,40,86,.18), 0 10px 22px rgba(0,40,86,.16); }
-  .card .ic { position: absolute; top: 10px; right: 10px; opacity: .55; }
-  .card .ctext { font-size: 15px; line-height: 1.4; padding-right: 18px; }
-  .card.p { background: var(--navy); color: #fff; display: flex; align-items: center; }
-  .card.p .ctext { font-family: var(--head); font-weight: 700; font-size: 17px; }
-  .card.p .ic { color: var(--sky); opacity: .9; }
-  .card.s { background: var(--s-bg); border-top: 6px solid var(--s-bar); }
-  .card.s .ic { color: var(--teal); }
-  .card.a { background: var(--a-bg); border-top: 6px dashed var(--a-bar); }
-  .card.a .ic { color: var(--rust); }
-  .slot .card { transform: none !important; }
-  .slot .card.p { justify-content: center; text-align: center; }
-  .slot .card.p .ctext { padding: 0 14px; }
-  .card.selected { box-shadow: 0 0 0 3px var(--orange), 0 10px 22px rgba(0,40,86,.2); }
+  .card { position: relative; border: 2px solid transparent; padding: 10px 28px 11px 13px; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none;
+          box-shadow: 0 1px 2px rgba(0,40,86,.14), 0 3px 10px rgba(0,40,86,.10); transition: box-shadow .15s, opacity .15s; }
+  .card:hover { box-shadow: 0 2px 4px rgba(0,40,86,.18), 0 8px 18px rgba(0,40,86,.14); }
+  .card .ic { position: absolute; top: 9px; right: 9px; display: flex; }
+  .card .ctext { font-size: 15.5px; line-height: 1.38; }
+  .card.p { width: 150px; height: 48px; border-radius: 24px; background: var(--p-bg); border-color: var(--p); color: var(--p); display: flex; align-items: center; justify-content: center; padding: 0 12px; text-align: center; }
+  .card.p .ctext { font-family: var(--head); font-weight: 700; font-size: 15px; line-height: 1.15; }
+  .card.p .ic { display: none; }
+  .card.s { background: var(--s-bg); border-color: var(--s); border-radius: 12px; }
+  .card.s .ic { color: var(--s); }
+  .card.a { background: var(--a-bg); border-color: var(--a); border-radius: 3px; }
+  .card.a .ic { color: var(--a); }
+  .slot > .card.s, .slot > .card.a { flex: 1; min-width: 0; }
+  #pile .card.s, #pile .card.a { width: 100%; }
+  #pile .card { rotate: var(--tilt, 0deg); }
+  .card.selected { box-shadow: 0 0 0 3px var(--orange), 0 8px 18px rgba(0,40,86,.18); }
   .card.drag-src { opacity: .25; }
   .card.locked { cursor: default; box-shadow: 0 1px 2px rgba(0,40,86,.12); }
-  .card.locked:hover { box-shadow: 0 1px 2px rgba(0,40,86,.12); }
-  .ghost { position: fixed; z-index: 1000; pointer-events: none; transform: rotate(2deg) scale(1.03) !important; box-shadow: 0 16px 34px rgba(0,40,86,.32) !important; }
+  .ghost { position: fixed !important; z-index: 1000; pointer-events: none; rotate: 1.5deg !important; box-shadow: 0 14px 32px rgba(0,40,86,.32) !important; margin: 0 !important; }
   body.dragging, body.dragging * { cursor: grabbing !important; }
 
   /* ---------- Pile ---------- */
-  #pile { display: flex; flex-wrap: wrap; gap: 16px; align-content: flex-start; align-items: flex-start; padding: 6px 4px 30px; min-height: 200px; border-radius: 16px; transition: box-shadow .15s, background .15s; }
-  #pile .card { width: calc(50% - 8px); }
-  #pile.can-drop { background: rgba(255,255,255,.35); }
-  #pile.over { box-shadow: 0 0 0 3px var(--sky); background: rgba(255,255,255,.5); }
-  #pile.select-target { box-shadow: 0 0 0 3px var(--sky); cursor: pointer; }
+  #pile { grid-column: 8; grid-row: 1; position: sticky; top: calc(var(--hdr) + 10px); max-height: calc(100vh - var(--hdr) - 86px); overflow-y: auto; overscroll-behavior: contain;
+          display: flex; flex-wrap: wrap; align-items: flex-start; align-content: flex-start; gap: 12px; padding: 8px 6px 18px; margin: -8px -8px 0; border-radius: 14px; border: 2px dashed transparent; min-height: 220px; scrollbar-width: thin; transition: border-color .12s, background .12s; }
+  #pile.receptive { border-color: #8FA6B3; background: rgba(255,255,255,.45); }
+  #pile.receptive.empty::before { content: "Drop a card here to take it off the board"; margin: auto; padding-top: 80px; color: var(--muted); font-size: 14.5px; }
+  #pile.over { background: rgba(79,163,196,.14); border-color: #4FA3C4; }
 
-  /* ---------- Reflection ---------- */
-  .reflect { max-width: 1040px; margin: 34px 0 0; animation: rise .4s ease-out; }
+  /* ---------- Check button ---------- */
+  .checkbar { grid-column: 8; grid-row: 2; position: sticky; bottom: 16px; display: flex; justify-content: center; padding-top: 14px; z-index: 20; pointer-events: none; }
+  .checkbar .btn { pointer-events: auto; }
+
+  /* ---------- Evaluation ---------- */
+  .yn { align-self: center; display: flex; gap: 8px; position: relative; z-index: 1; }
+  .yn button { flex: 1; border: 1.5px solid #9DB0BC; background: #fff; color: var(--ink); border-radius: 999px; padding: 9px 0; font-weight: 700; cursor: pointer; }
+  .yn button:hover { border-color: var(--ink); }
+  .yn button[aria-pressed="true"] { background: #33444F; border-color: #33444F; color: #fff; }
+
+  .reflect { max-width: 1060px; margin: 30px 0 0; animation: rise .35s ease-out; }
   @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
   .reflect h2 { font-family: var(--head); color: var(--navy); font-size: 24px; margin: 0 0 8px; }
-  .reflect p { margin: 0 0 8px; font-size: 17px; }
-  .reflect textarea { width: 100%; min-height: 130px; font: inherit; font-size: 16px; color: var(--ink); padding: 12px 14px; border: 1.5px solid #B4C6D0; border-radius: 10px; background: #fff; margin-top: 4px; }
-  .reflect .end { margin-top: 10px; font-size: 15.5px; color: var(--slate); }
-  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .reflect .analogy { font-size: 16px; color: var(--muted); margin: 0 0 8px; }
+  .reflect .q { font-size: 19.5px; font-weight: 600; color: var(--navy); line-height: 1.4; margin: 0 0 6px; }
+  .reflect .why { font-size: 16.5px; font-weight: 700; margin: 0 0 8px; }
+  .reflect textarea { width: 100%; min-height: 130px; font: inherit; font-size: 16px; color: var(--ink); padding: 12px 14px; border: 1.5px solid #B1C2CC; border-radius: 10px; background: #fff; }
+  .reflect .end { margin: 10px 0 0; font-size: 15.5px; color: var(--muted); }
 
-  @media (max-width: 1320px) { .table { grid-template-columns: minmax(0, 1fr) 300px; } #pile .card { width: 100%; } .board.three, .board.four { grid-template-columns: 42px 160px 32px minmax(0, 1fr) 32px minmax(0, 1fr); } .board.four { grid-template-columns: 42px 160px 32px minmax(0, 1fr) 32px minmax(0, 1fr) 22px 150px; } }
-  @media (max-width: 980px) { .table { grid-template-columns: 1fr; } #pile .card { width: calc(50% - 8px); } header .title { display: none; } }
+  /* ---------- Dialog ---------- */
+  dialog { border: 0; border-radius: 14px; padding: 24px 26px 20px; max-width: 380px; box-shadow: 0 20px 50px rgba(0,0,0,.3); color: var(--ink); }
+  dialog::backdrop { background: rgba(10,25,40,.45); }
+  dialog p { margin: 0 0 18px; font-size: 17px; }
+  dialog .row { display: flex; justify-content: flex-end; gap: 10px; }
+  dialog button { border-radius: 999px; padding: 8px 20px; font-weight: 700; cursor: pointer; border: 1.5px solid #9DB0BC; background: #fff; color: var(--ink); }
+  dialog button.go { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 1100px) {
+    .table { grid-template-columns: 22px 128px 18px minmax(0,1fr) 18px minmax(0,1fr) 20px minmax(0,1fr); }
+    .table.eval { grid-template-columns: 22px 128px 18px minmax(0,1fr) 18px minmax(0,1fr) 16px 160px; }
+    .card.p { width: 128px; }
+  }
 </style>
 </head>
 <body>
 <header>
   <img src="assets/hpu_wordmark_white.png" alt="Hawaiʻi Pacific University">
   <span class="sep" aria-hidden="true"></span>
-  <span class="title">PH3020 · Policy cycle activity</span>
-  <div class="right">
-    <button id="check" type="button">Check our board</button>
-    <button id="reset" type="button">Start over</button>
-  </div>
+  <span class="course">PH3020 · Chapter 8</span>
+  <button id="reset" type="button" hidden>Start over</button>
 </header>
-<main class="canvas" id="app"></main>
+<main id="app" class="canvas"></main>
+<dialog id="confirm" aria-labelledby="confirmText">
+  <p id="confirmText">Start over? This will clear your cards and responses.</p>
+  <div class="row"><button type="button" id="cancelReset">Cancel</button><button type="button" class="go" id="doReset">Start over</button></div>
+</dialog>
 <div class="sr" aria-live="polite" id="live"></div>
 
 <script>
 (function () {
   "use strict";
 
-  // ---------- Approved card content (wording locked) ----------
+  // ---------- Card wording (final, Version 4) ----------
   const STAGES = ["Problem definition", "Agenda setting", "Policy establishment", "Policy implementation", "Policy assessment"];
   const SHOULD = [
     "Ongoing monitoring of U.S. vaccine and disease data identifies a public health concern. Experts analyze the data to define the problem and identify potential solutions.",
     "Following a standardized and agreed-upon process, the CDC’s panel of independent vaccine experts decides which public health concerns to address and when.",
     "The CDC’s panel of independent vaccine experts analyzes the scientific data and votes on proposed changes in a public meeting, with input from official medical groups and the public. The CDC director then adopts the expert panel’s recommendations.",
-    "The CDC publishes the updated national vaccine policy. Trusting the open and transparent process, medical groups, healthcare providers, insurers, and states adopt it as the best available science.",
+    "The CDC publishes the updated national vaccine policy. Trusting the open and transparent process, medical groups, healthcare providers, insurers, and states adopt the policy as reflecting the best available science.",
     "Experts continue monitoring vaccination rates, disease outbreaks, and vaccine safety data to determine whether the new policy is working, having no effect, or causing harm. These findings inform the next cycle of policy development."
   ];
   const ACTUAL = [
-    "Kennedy first decided that U.S. vaccine policy should be changed to recommend fewer childhood vaccines. Ongoing monitoring of U.S. vaccine and disease data had produced no data showing a problem for experts to investigate.",
-    "Kennedy first removed all 17 independent vaccine experts from the panel and replaced them with individuals of his choosing. The new panel then put a review of the childhood vaccine schedule on its agenda.",
-    "The CDC’s acting director adopted a new vaccine schedule developed by federal officials. The expert panel did not analyze the data or vote on the changes. Routine childhood immunizations were dropped from 17 diseases to 11.",
-    "Major medical groups rejected the new policy and published their own vaccine recommendations. A majority of states chose to follow those instead of the national vaccine policy. A federal judge then paused the new national vaccine policy.",
-    "The CDC paused many of its routine systems for monitoring vaccination rates, hampering the ability to assess whether the new policy was working, having no effect, or causing harm."
+    "Kennedy first decided that U.S. vaccine policy should be changed to recommend fewer childhood vaccines. Ongoing monitoring of U.S. vaccine and disease data had produced no data showing a public health problem for experts to investigate.",
+    "Kennedy first removed all 17 independent vaccine experts from the panel and replaced them with individuals of his choosing. The new panel then placed a review of the childhood vaccine schedule on its agenda.",
+    "The CDC’s acting director adopted a new vaccine schedule developed by federal officials without a review or vote by the expert panel. Routine childhood immunizations were dropped from 17 diseases to 11.",
+    "Major medical groups rejected the new policy and published their own vaccine recommendations. A majority of states chose to follow alternative recommendations instead of the national vaccine policy. A federal judge then paused the new policy.",
+    "The CDC paused many of its routine systems for monitoring vaccination rates, making it difficult to assess whether the new policy was working, having no effect, or causing harm."
   ];
 
-  const COLS = ["p", "s", "a"];
+  const FLOWS = ["p", "s", "a"];
   const TEXT = { p: STAGES, s: SHOULD, a: ACTUAL };
-  const NAME = { p: "The policy cycle", s: "What should happen", a: "What actually happened" };
-  const KIND = { p: "Policy stage", s: "What should happen", a: "What actually happened" };
-  const GRIDCOL = { p: 2, s: 4, a: 6 };
-  const KEY = "ph3020-policy-cycle-v3";
+  const NAME = { p: "Policy cycle", s: "What should happen", a: "What actually happened" };
+  const GCOL = { p: 2, s: 4, a: 6 };
+  const KEY = "ph3020-policy-cycle-v4";
+  try { localStorage.removeItem("ph3020-policy-cycle-v2"); localStorage.removeItem("ph3020-policy-cycle-v3"); } catch (e) {}
 
   const svg = (w, inner, sw) => '<svg width="' + w + '" height="' + w + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 2.2) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
   const IC = {
     p: '<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/>',
     s: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.5h6V4"/><path d="M9 10h6M9 14h6M9 18h4"/>',
     a: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
-    eval: '<path d="M12 3v18M5 7h14M5 7l-3 7h6zM19 7l-3 7h6z"/>'
+    e: '<path d="M12 3v18M5 7h14M5 7l-3 7h6zM19 7l-3 7h6z"/>'
   };
-  const DOWN = '<svg viewBox="0 0 16 26" aria-hidden="true"><path d="M8 1v19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M2 16l6 8 6-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const DOWN = '<svg viewBox="0 0 14 22" aria-hidden="true"><path d="M7 1v17" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M1.6 13.5 7 20.5l5.4-7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   const $ = (s, r) => (r || document).querySelector(s);
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
@@ -180,148 +210,218 @@
   const catOf = id => id[0];
   function say(t) { const l = $("#live"); l.textContent = ""; setTimeout(() => { l.textContent = t; }, 30); }
 
+  // ---------- State (session only: cleared when the browser tab closes) ----------
   function fresh() {
-    const ids = []; COLS.forEach(c => { for (let i = 0; i < 5; i++) ids.push(c + i); });
-    const S = { v: 3, pile: shuffle(ids), rot: {}, slots: {}, status: {}, count: {}, locked: {}, evals: [null, null, null, null, null], reflection: "" };
-    ids.forEach(id => { S.rot[id] = +(Math.random() * 2.4 - 1.2).toFixed(2); });
-    COLS.forEach(c => { S.slots[c] = [null, null, null, null, null]; S.status[c] = ""; S.count[c] = 0; S.locked[c] = false; });
+    const ids = []; FLOWS.forEach(c => { for (let i = 0; i < 5; i++) ids.push(c + i); });
+    const S = { v: 4, started: false, phase: "build", pile: shuffle(ids), tilt: {}, slots: {}, status: {}, count: {}, locked: {}, evals: [null, null, null, null, null], reflection: "" };
+    ids.forEach(id => { S.tilt[id] = +(Math.random() * 1.6 - 0.8).toFixed(2); });
+    FLOWS.forEach(c => { S.slots[c] = [null, null, null, null, null]; S.status[c] = ""; S.count[c] = 0; S.locked[c] = false; });
     return S;
   }
   let S;
-  try { S = JSON.parse(localStorage.getItem(KEY)); if (!S || S.v !== 3) S = fresh(); } catch (e) { S = fresh(); }
-  COLS.forEach(c => { if (S.status[c] === "checking") S.status[c] = ""; });
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+  try { S = JSON.parse(sessionStorage.getItem(KEY)); if (!S || S.v !== 4) S = fresh(); } catch (e) { S = fresh(); }
+  FLOWS.forEach(c => { if (S.status[c] === "checking") S.status[c] = ""; });
+  const save = () => { try { sessionStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 
-  let selected = null, busy = false, focusAfter = null;
+  let selected = null, busy = false, runId = 0;
   const app = $("#app");
-  const allLocked = () => COLS.every(c => S.locked[c]);
-  const placed = () => COLS.reduce((n, c) => n + S.slots[c].filter(Boolean).length, 0);
+  const placedCount = () => FLOWS.reduce((n, c) => n + S.slots[c].filter(Boolean).length, 0);
   const inPile = () => S.pile.filter(id => !S.slots[catOf(id)].includes(id));
   const where = id => { const i = S.slots[catOf(id)].indexOf(id); return i === -1 ? null : i; };
-  const canMove = id => !busy && !S.locked[catOf(id)];
+  const canMove = id => S.phase === "build" && !busy && !S.locked[catOf(id)];
+  const slotEl = (c, i) => $('.slot[data-col="' + c + '"][data-row="' + i + '"]');
 
-  // ---------- Moves ----------
-  function placeInSlot(id, col, i) {
-    if (catOf(id) !== col || S.locked[col] || busy) return false;
-    const from = where(id), occ = S.slots[col][i];
-    if (from === i) return false;
-    if (from !== null) S.slots[col][from] = occ; // swap two cards on the board
-    S.slots[col][i] = id;                         // a card bumped by a card from the pile goes back to the pile
-    save(); return true;
-  }
-  function toPile(id) {
-    const c = catOf(id), i = where(id);
-    if (S.locked[c] || busy || i === null) return false;
-    S.slots[c][i] = null; save(); return true;
-  }
-  function moved() { selected = null; const y = window.scrollY; render(); window.scrollTo(0, y); }
+  // ---------- Cards are created once and moved, never rebuilt ----------
+  const cards = {};
+  FLOWS.forEach(c => TEXT[c].forEach((txt, i) => {
+    const el = document.createElement("div");
+    el.className = "card " + c; el.dataset.id = c + i; el.setAttribute("role", "button"); el.tabIndex = 0;
+    el.setAttribute("aria-label", NAME[c] + " card: " + txt);
+    el.innerHTML = '<span class="ic">' + svg(14, IC[c]) + '</span><div class="ctext">' + txt + '</div>';
+    el.addEventListener("pointerdown", onDown);
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); activate(el.dataset.id); }
+      else if ((e.key === "Delete" || e.key === "Backspace") && where(el.dataset.id) !== null) { e.preventDefault(); unplace(el.dataset.id); }
+    });
+    cards[c + i] = el;
+  }));
 
-  // ---------- Render ----------
-  function cardHTML(id, inSlot) {
-    const c = catOf(id), i = +id.slice(1), locked = S.locked[c], sel = selected === id;
-    const rot = inSlot ? "" : ' style="transform: rotate(' + S.rot[id] + 'deg)"';
-    return '<div class="card ' + c + (locked ? " locked" : "") + (sel ? " selected" : "") + '" data-id="' + id + '"' + rot +
-      ' tabindex="' + (locked ? -1 : 0) + '" role="button" aria-pressed="' + sel + '" aria-label="' + esc(KIND[c] + " card: " + TEXT[c][i]) + '">' +
-      '<span class="ic">' + svg(15, IC[c]) + '</span><div class="ctext">' + TEXT[c][i] + '</div></div>';
-  }
-  function statusHTML(c) {
-    const st = S.status[c];
-    if (st === "checking") return '<div class="st wait">Checking…</div>';
-    if (st === "no") return '<div class="st no">' + S.count[c] + ' of 5 in the right place</div>';
-    if (S.locked[c]) return '<div class="st ok">✓ Correct</div>';
-    return '<div class="st"></div>';
-  }
-  function render() {
-    const done = allLocked(), pile = inPile(), showPile = pile.length > 0 && !done;
-    let h = '<section class="intro"><h1>Recent vaccine policy changes: who’s right?</h1>' +
+  // ---------- Screens ----------
+  function showIntro() {
+    $("#reset").hidden = true;
+    app.innerHTML = '<section class="intro"><h1>Recent vaccine policy changes: who’s right?</h1>' +
       '<p>The federal government says recent changes to national childhood vaccination policy were adopted following a careful review of the scientific evidence. Critics argue that the proper process was not followed and that the changes are not supported by science.</p>' +
       '<p>Your group will apply what you’ve learned about the policy cycle to answer one question: <strong>Who’s right?</strong></p>' +
-      '<p class="how">' + (done
-        ? 'Your board is complete. Compare what should happen with what actually happened, and decide for each stage whether the proper process was followed.'
-        : 'Drag each card to its spot on the board, or click a card and then click a spot. Rearrange as often as you like. When all 15 cards are placed, check your board.') + '</p></section>';
+      '<button class="btn" id="begin" type="button">Begin</button></section>';
+    $("#begin").onclick = () => { S.started = true; save(); buildActivity(); window.scrollTo(0, 0); };
+    $("#begin").focus();
+  }
 
-    h += '<div class="table' + (showPile ? "" : " no-pile") + '"><div class="board ' + (done ? "four" : "three") + '" id="board">';
-    COLS.forEach(c => { h += '<div class="flowbox ' + (S.status[c] === "checking" ? "checking" : S.status[c] === "no" ? "attention" : S.locked[c] ? "correct" : "") + '" style="grid-column:' + GRIDCOL[c] + '"></div>'; });
-    COLS.forEach(c => { h += '<div class="fhead" style="grid-column:' + GRIDCOL[c] + ';grid-row:1"><div class="t">' + svg(16, IC[c], 2.4) + NAME[c] + '</div>' + statusHTML(c) + '</div>'; });
-    if (done) h += '<div class="fhead" style="grid-column:8;grid-row:1"><div class="t">' + svg(16, IC.eval, 2.4) + 'Proper process followed?</div><div class="st eval">Your group decides</div></div>';
+  function buildActivity() {
+    $("#reset").hidden = false;
+    const ev = S.phase === "eval";
+    let h = '<section class="lead">' + (ev
+      ? '<h1>Compare the process</h1><p>Compare what should happen with what actually happened at each stage. As a group, decide whether the proper process was followed.</p>'
+      : '<h1>Build the policy cycle</h1><p>Arrange the cards to build three parallel flows. Match what should happen and what actually happened to each stage of the policy cycle. When all 15 cards are in place, check your work. <span class="hint">Drag a card into place, or click a card and then click its destination.</span></p>') + '</section>';
+    h += '<div class="table' + (ev ? " eval" : "") + '"><div class="board" id="board">';
+    if (!ev) FLOWS.forEach(c => { h += '<div class="flowbox" data-flow="' + c + '" style="grid-column:' + GCOL[c] + '"></div>'; });
+    FLOWS.forEach(c => { h += '<div class="fhead ' + c + '" style="grid-column:' + GCOL[c] + '"><div class="t">' + svg(16, IC[c], 2.4) + NAME[c] + '</div>' + (ev ? "" : '<div class="st" data-st="' + c + '"></div>') + '</div>'; });
+    if (ev) h += '<div class="fhead e" style="grid-column:8"><div class="t">' + svg(16, IC.e, 2.4) + 'Was the proper process followed?</div></div>';
     for (let r = 0; r < 5; r++) {
       const row = 2 + r * 2;
-      h += '<div class="num" style="grid-row:' + row + '" aria-hidden="true">' + (r + 1) + '</div>';
-      COLS.forEach(c => {
-        const id = S.slots[c][r];
-        h += '<div class="slot' + (id ? " filled" : "") + '" data-col="' + c + '" data-row="' + r + '" style="grid-column:' + GRIDCOL[c] + ';grid-row:' + row + '"' +
-          ' tabindex="' + (id || S.locked[c] ? -1 : 0) + '" role="button" aria-label="' + esc(NAME[c] + ", stage " + (r + 1) + (id ? "" : ", empty spot")) + '">' + (id ? cardHTML(id, true) : "") + '</div>';
+      FLOWS.forEach(c => {
+        h += '<div class="slot ' + c + '" data-col="' + c + '" data-row="' + r + '" style="grid-column:' + GCOL[c] + ';grid-row:' + row + '" tabindex="-1" aria-label="' + esc(NAME[c] + ", stage " + (r + 1)) + '">' +
+          (c === "p" ? '<span class="num" aria-hidden="true">' + (r + 1) + '</span>' : "") + '<span class="ghosticon">' + svg(c === "p" ? 16 : 22, IC[c]) + '</span></div>';
       });
       h += '<div class="conn" style="grid-column:3;grid-row:' + row + '"></div><div class="conn" style="grid-column:5;grid-row:' + row + '"></div>';
-      if (done) {
+      if (ev) {
         const v = S.evals[r];
         h += '<div class="yn" style="grid-column:8;grid-row:' + row + '" role="group" aria-label="' + esc("Stage " + (r + 1) + ", " + STAGES[r] + ": was the proper process followed?") + '">' +
-          '<button type="button" data-eval="' + r + '" data-v="Yes" aria-pressed="' + (v === "Yes") + '">Yes</button>' +
-          '<button type="button" data-eval="' + r + '" data-v="No" aria-pressed="' + (v === "No") + '">No</button></div>';
+          '<button type="button" data-eval="' + r + '" data-v="Yes" aria-pressed="' + (v === "Yes") + '">Yes</button><button type="button" data-eval="' + r + '" data-v="No" aria-pressed="' + (v === "No") + '">No</button></div>';
       }
-      if (r < 4) COLS.forEach(c => { h += '<div class="arw" style="grid-column:' + GRIDCOL[c] + ';grid-row:' + (row + 1) + '">' + DOWN + '</div>'; });
+      if (r < 4) FLOWS.forEach(c => { h += '<div class="arw" style="grid-column:' + GCOL[c] + ';grid-row:' + (row + 1) + '">' + DOWN + '</div>'; });
     }
     h += '<svg id="cyc" aria-hidden="true"></svg></div>';
-    if (showPile) h += '<div id="pile" aria-label="Cards to place">' + pile.map(id => cardHTML(id, false)).join("") + '</div>';
+    if (!ev) h += '<div id="pile" aria-label="Cards to place"></div><div class="checkbar"><button class="btn" id="check" type="button">Check our cards</button></div>';
     h += '</div>';
-
-    if (done && S.evals.every(Boolean)) {
-      h += '<section class="reflect"><h2>Getting it right vs. doing it right</h2>' +
-        '<p>Sometimes we stumble upon the right answer by accident. There’s a reason your math teacher made you show your work.</p>' +
-        '<p>Suppose the new vaccine policy turns out to be the best possible policy for improving public health. Does it still matter whether the proper process was followed in developing it?</p>' +
-        '<p><strong>Explain why or why not.</strong></p>' +
-        '<label class="sr" for="refl">Your group’s thoughts</label><textarea id="refl" maxlength="2000" placeholder="Your group’s thoughts">' + esc(S.reflection) + '</textarea>' +
-        '<p class="end">Be ready to discuss your reasoning with the class.</p></section>';
-    }
+    if (ev) h += '<div id="reflectSlot"></div>';
     app.innerHTML = h;
 
-    const chk = $("#check"), n = placed();
-    chk.hidden = done;
-    chk.disabled = n < 15 || busy;
-    chk.title = n < 15 ? "Place all 15 cards first" : "";
-    chk.classList.toggle("ready", n === 15 && !busy && !COLS.some(c => S.status[c] === "no"));
-
-    wire(); drawCycle();
-    if (selected) markTargets();
-    if (focusAfter) { const el = $(focusAfter); if (el) el.focus({ preventScroll: true }); focusAfter = null; }
+    $$(".slot").forEach(wireSlot);
+    const pile = $("#pile"); if (pile) wirePile(pile);
+    const chk = $("#check"); if (chk) chk.onclick = check;
+    $$("[data-eval]").forEach(b => b.onclick = () => {
+      const r = +b.dataset.eval; S.evals[r] = b.dataset.v; save();
+      $$('[data-eval="' + r + '"]').forEach(x => x.setAttribute("aria-pressed", String(x.dataset.v === S.evals[r])));
+      maybeReflect();
+    });
+    FLOWS.forEach(c => { if (!ev) updateFlow(c); });
+    selected = null;
+    sync();
+    if (ev) maybeReflect(true);
+    observeBoard();
   }
 
-  // The returning arrow: from the last stage back up to the first
-  function drawCycle() {
-    const board = $("#board"), g = $("#cyc"); if (!board || !g) return;
-    const b = board.getBoundingClientRect();
-    const s0 = $('.slot[data-col="p"][data-row="0"]').getBoundingClientRect();
-    const s4 = $('.slot[data-col="p"][data-row="4"]').getBoundingClientRect();
-    const xL = s0.left - b.left, gx = 10, y0 = s0.top - b.top + s0.height * 0.62, y4 = s4.top - b.top + s4.height * 0.5, r = 10;
-    const d = "M" + (xL - 2) + " " + y4 + " H" + (gx + r) + " Q" + gx + " " + y4 + " " + gx + " " + (y4 - r) + " V" + (y0 + r) + " Q" + gx + " " + y0 + " " + (gx + r) + " " + y0 + " H" + (xL - 9);
-    g.setAttribute("viewBox", "0 0 " + b.width + " " + b.height);
-    g.innerHTML = '<path d="' + d + '" fill="none" stroke="#8FA6B3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 6"/>' +
-      '<path d="M' + (xL - 12) + ' ' + (y0 - 6) + ' L' + (xL - 3) + ' ' + y0 + ' L' + (xL - 12) + ' ' + (y0 + 6) + '" fill="none" stroke="#8FA6B3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  function maybeReflect(instant) {
+    if (!S.evals.every(Boolean) || $("#refl")) return;
+    const slot = $("#reflectSlot"); if (!slot) return;
+    slot.innerHTML = '<section class="reflect"' + (instant ? ' style="animation:none"' : "") + '><h2>Getting it right vs. doing it right</h2>' +
+      '<p class="analogy">Sometimes we stumble upon the right answer by accident. There’s a reason your math teacher made you show your work.</p>' +
+      '<p class="q">Suppose the new vaccine policy turns out to be the best possible policy for improving public health. Does it still matter whether the proper process was followed in developing it?</p>' +
+      '<p class="why">Explain why or why not.</p>' +
+      '<label class="sr" for="refl">Your group’s thoughts</label><textarea id="refl" maxlength="2000" placeholder="Your group’s thoughts…"></textarea>' +
+      '<p class="end">Be ready to discuss your reasoning with the class.</p></section>';
+    const t = $("#refl"); t.value = S.reflection;
+    t.addEventListener("input", () => { S.reflection = t.value; save(); });
   }
-  window.addEventListener("resize", drawCycle);
 
-  // ---------- Click / keyboard ----------
+  // ---------- Keep the DOM in step with the state ----------
+  function sync() {
+    const active = document.activeElement;
+    FLOWS.forEach(c => S.slots[c].forEach((id, i) => {
+      const s = slotEl(c, i); if (!s) return;
+      s.classList.toggle("filled", !!id);
+      if (id && cards[id].parentElement !== s) s.appendChild(cards[id]);
+    }));
+    const pile = $("#pile");
+    if (pile) {
+      const want = inPile(), have = Array.from(pile.children).map(e => e.dataset.id);
+      if (want.join() !== have.join()) want.forEach(id => pile.appendChild(cards[id]));
+      want.forEach(id => cards[id].style.setProperty("--tilt", S.tilt[id] + "deg"));
+      pile.classList.toggle("empty", want.length === 0);
+    }
+    Object.keys(cards).forEach(id => {
+      const el = cards[id], locked = S.locked[catOf(id)] || S.phase === "eval";
+      el.classList.toggle("locked", locked); el.tabIndex = locked ? -1 : 0;
+      el.classList.toggle("selected", selected === id); el.setAttribute("aria-pressed", String(selected === id));
+    });
+    if (active && active !== document.activeElement && document.contains(active)) active.focus({ preventScroll: true });
+    markTargets(); updateCheck(); drawCycle(); fitPile(); save();
+  }
+  function updateCheck() {
+    const b = $("#check"); if (!b) return;
+    const n = placedCount();
+    b.disabled = n < 15 || busy;
+    b.title = n < 15 ? "Place all 15 cards first" : "";
+  }
+  function updateFlow(c) {
+    const st = $('[data-st="' + c + '"]'), box = $('.flowbox[data-flow="' + c + '"]'); if (!st) return;
+    const s = S.status[c];
+    st.className = "st" + (s === "checking" ? " wait" : s === "no" ? " no" : S.locked[c] ? " ok" : "");
+    st.textContent = s === "checking" ? "Checking…" : s === "no" ? S.count[c] + " of 5 correct. Try again." : S.locked[c] ? "Correct!" : "";
+    box.className = "flowbox" + (s === "checking" ? " checking" : s === "no" ? " no" : "");
+  }
+  function clearStale(c) { if (S.status[c] === "no") { S.status[c] = ""; S.count[c] = 0; updateFlow(c); } }
+
+  // smooth "snap" from where a card was to where it lands
+  function flip(id, from) {
+    const el = cards[id], to = el.getBoundingClientRect();
+    const dx = from.left - to.left, dy = from.top - to.top;
+    if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
+    el.style.transition = "none"; el.style.translate = dx + "px " + dy + "px";
+    el.getBoundingClientRect();
+    requestAnimationFrame(() => { el.style.transition = "translate .2s ease-out"; el.style.translate = "0px 0px"; });
+    setTimeout(() => { el.style.transition = ""; el.style.translate = ""; }, 260);
+  }
+
+  // ---------- Moves ----------
+  function placeCard(id, c, i, fromRect) {
+    if (catOf(id) !== c || !canMove(id)) return false;
+    const from = where(id), occ = S.slots[c][i];
+    if (from === i) return false;
+    const rects = { [id]: fromRect || cards[id].getBoundingClientRect() };
+    if (occ) rects[occ] = cards[occ].getBoundingClientRect();
+    if (from !== null) S.slots[c][from] = occ;   // swap two cards on the board
+    S.slots[c][i] = id;                           // a card bumped by one from the pile goes back to the pile
+    clearStale(c); selected = null; sync();
+    Object.keys(rects).forEach(k => flip(k, rects[k]));
+    return true;
+  }
+  function unplace(id, fromRect) {
+    const c = catOf(id), i = where(id);
+    if (i === null || !canMove(id)) return false;
+    const r = fromRect || cards[id].getBoundingClientRect();
+    S.slots[c][i] = null; clearStale(c); selected = null; sync(); flip(id, r);
+    say("Card taken off the board."); return true;
+  }
+
+  // ---------- Click and keyboard ----------
   function markTargets() {
-    $$(".select-target").forEach(e => e.classList.remove("select-target"));
-    const pile = $("#pile"); if (pile) { pile.tabIndex = -1; pile.removeAttribute("role"); }
+    $$(".slot.target").forEach(s => { s.classList.remove("target"); s.tabIndex = -1; });
+    const pile = $("#pile");
+    if (pile) { pile.classList.remove("receptive"); pile.tabIndex = -1; pile.removeAttribute("role"); }
     if (!selected) return;
     const c = catOf(selected);
-    $$('.slot[data-col="' + c + '"]').forEach(s => { if (!s.querySelector('[data-id="' + selected + '"]')) { s.classList.add("select-target"); s.tabIndex = 0; } });
-    if (pile && where(selected) !== null) { pile.classList.add("select-target"); pile.tabIndex = 0; pile.setAttribute("role", "button"); pile.setAttribute("aria-label", "Return the selected card to the pile"); }
+    $$('.slot[data-col="' + c + '"]').forEach(s => { if (!s.contains(cards[selected])) { s.classList.add("target"); s.tabIndex = 0; } });
+    if (pile && where(selected) !== null) { pile.classList.add("receptive"); pile.tabIndex = 0; pile.setAttribute("role", "button"); pile.setAttribute("aria-label", "Take the selected card off the board"); }
   }
   function select(id) {
-    selected = (selected === id || !id) ? null : id;
-    $$(".card.selected").forEach(e => { e.classList.remove("selected"); e.setAttribute("aria-pressed", "false"); });
-    if (selected) { const el = $('.card[data-id="' + selected + '"]'); if (el) { el.classList.add("selected"); el.setAttribute("aria-pressed", "true"); } say("Card selected. Choose a spot in " + NAME[catOf(selected)].toLowerCase() + "."); }
+    selected = (!id || selected === id) ? null : id;
+    Object.keys(cards).forEach(k => { cards[k].classList.toggle("selected", selected === k); cards[k].setAttribute("aria-pressed", String(selected === k)); });
     markTargets();
+    if (selected) say("Card selected. Choose a spot in " + NAME[catOf(selected)].toLowerCase() + ".");
   }
   function activate(id) {
     if (selected && selected !== id && catOf(selected) === catOf(id) && where(id) !== null && canMove(id)) {
-      const sel = selected; focusAfter = '.card[data-id="' + sel + '"]';
-      if (placeInSlot(sel, catOf(id), where(id))) { say("Cards swapped."); moved(); }
+      if (placeCard(selected, catOf(id), where(id))) say("Cards swapped.");
       return;
     }
     if (canMove(id)) select(id);
+  }
+  function wireSlot(s) {
+    const place = () => {
+      if (!selected) return;
+      if (s.dataset.col !== catOf(selected)) { say("That card belongs in " + NAME[catOf(selected)].toLowerCase() + "."); return; }
+      const id = selected;
+      if (placeCard(id, s.dataset.col, +s.dataset.row)) { say("Card placed."); cards[id].focus({ preventScroll: true }); }
+    };
+    s.addEventListener("click", e => { if (suppressClick || e.target.closest(".card")) return; if (selected) { e.stopPropagation(); place(); } });
+    s.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target === s) { e.preventDefault(); place(); } });
+  }
+  function wirePile(pile) {
+    const back = () => { if (selected && where(selected) !== null) { const id = selected; if (unplace(id)) cards[id].focus({ preventScroll: true }); } };
+    pile.addEventListener("click", e => { if (suppressClick || e.target.closest(".card")) return; back(); });
+    pile.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target === pile) { e.preventDefault(); back(); } });
   }
 
   // ---------- Drag ----------
@@ -330,108 +430,128 @@
     const card = e.target.closest(".card"); if (!card || e.button > 0) return;
     if (!canMove(card.dataset.id)) return;
     drag = { id: card.dataset.id, card, x0: e.clientX, y0: e.clientY, started: false };
-    window.addEventListener("pointermove", onMove); window.addEventListener("pointerup", onUp); window.addEventListener("pointercancel", cancel);
+    window.addEventListener("pointermove", onMove); window.addEventListener("pointerup", onUp); window.addEventListener("pointercancel", cancelDrag);
   }
-  function start() {
+  function startDrag() {
     const r = drag.card.getBoundingClientRect(), g = drag.card.cloneNode(true);
     g.classList.add("ghost"); g.classList.remove("selected");
-    Object.assign(g.style, { width: r.width + "px", height: r.height + "px", left: r.left + "px", top: r.top + "px" });
+    Object.assign(g.style, { width: r.width + "px", height: r.height + "px", left: r.left + "px", top: r.top + "px", translate: "", transition: "none" });
     document.body.appendChild(g);
     Object.assign(drag, { ghost: g, dx: drag.x0 - r.left, dy: drag.y0 - r.top, started: true });
     drag.card.classList.add("drag-src"); document.body.classList.add("dragging");
     if (selected) select(null);
     const c = catOf(drag.id);
-    $$(".slot").forEach(s => { if (!S.locked[s.dataset.col]) s.classList.add(s.dataset.col === c ? "can-drop" : "no-drop"); });
-    const pile = $("#pile"); if (pile && where(drag.id) !== null) pile.classList.add("can-drop");
+    $$(".slot").forEach(s => s.classList.add(s.dataset.col === c && !S.locked[c] ? "can-drop" : "no-drop"));
+    const pile = $("#pile"); if (pile && where(drag.id) !== null) pile.classList.add("receptive", "can-drop");
   }
   const targetAt = (x, y) => { const el = document.elementFromPoint(x, y); return el ? (el.closest(".slot") || el.closest("#pile")) : null; };
   function onMove(e) {
     if (!drag) return;
-    if (!drag.started) { if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 6) return; start(); }
+    if (!drag.started) { if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 6) return; startDrag(); }
     e.preventDefault();
     drag.ghost.style.left = (e.clientX - drag.dx) + "px"; drag.ghost.style.top = (e.clientY - drag.dy) + "px";
     $$(".over").forEach(x => x.classList.remove("over"));
     const t = targetAt(e.clientX, e.clientY);
     if (t && t.classList.contains("can-drop")) t.classList.add("over");
-    const v = e.clientY < 50 + 70 ? -16 : e.clientY > innerHeight - 70 ? 16 : 0;
+    const v = e.clientY < 46 + 60 ? -16 : e.clientY > innerHeight - 60 ? 16 : 0;
     clearInterval(scrollTimer); if (v) scrollTimer = setInterval(() => window.scrollBy(0, v), 16);
   }
-  function endVisuals() {
+  function endDrag() {
     clearInterval(scrollTimer);
     if (drag && drag.ghost) drag.ghost.remove();
     document.body.classList.remove("dragging");
     $$(".can-drop, .no-drop, .over, .drag-src").forEach(x => x.classList.remove("can-drop", "no-drop", "over", "drag-src"));
-    window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerup", onUp); window.removeEventListener("pointercancel", cancel);
+    const pile = $("#pile"); if (pile && !(selected && where(selected) !== null)) pile.classList.remove("receptive");
+    window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerup", onUp); window.removeEventListener("pointercancel", cancelDrag);
   }
-  function cancel() { endVisuals(); drag = null; }
+  function cancelDrag() { endDrag(); drag = null; }
   function onUp(e) {
     if (!drag) return;
-    const d = drag; endVisuals(); drag = null;
+    const d = drag, ghostRect = d.ghost ? d.ghost.getBoundingClientRect() : null;
+    const t = d.started ? targetAt(e.clientX, e.clientY) : null;
+    endDrag(); drag = null;
     suppressClick = true; setTimeout(() => { suppressClick = false; }, 0);
     if (!d.started) { activate(d.id); return; }
-    const t = targetAt(e.clientX, e.clientY); if (!t) return;
-    let ok = false;
-    if (t.id === "pile") ok = toPile(d.id);
-    else if (t.dataset.col === catOf(d.id)) ok = placeInSlot(d.id, t.dataset.col, +t.dataset.row);
-    if (ok) { say("Card moved."); moved(); }
-  }
-
-  // ---------- Wiring ----------
-  function wire() {
-    $$(".card").forEach(c => {
-      c.addEventListener("pointerdown", onDown);
-      c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); activate(c.dataset.id); } });
-    });
-    $$(".slot").forEach(s => {
-      const place = () => {
-        if (!selected) return;
-        if (s.dataset.col !== catOf(selected)) { say("That card belongs in " + NAME[catOf(selected)].toLowerCase() + "."); return; }
-        const sel = selected; focusAfter = '.card[data-id="' + sel + '"]';
-        if (placeInSlot(sel, s.dataset.col, +s.dataset.row)) { say("Card placed."); moved(); }
-      };
-      s.addEventListener("click", e => { if (suppressClick || e.target.closest(".card")) return; if (selected) { e.stopPropagation(); place(); } });
-      s.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target === s) { e.preventDefault(); place(); } });
-    });
-    const pile = $("#pile");
-    if (pile) {
-      const back = () => { if (selected && where(selected) !== null) { const sel = selected; focusAfter = '.card[data-id="' + sel + '"]'; if (toPile(sel)) { say("Card returned to the pile."); moved(); } } };
-      pile.addEventListener("click", e => { if (suppressClick || e.target.closest(".card")) return; back(); });
-      pile.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target === pile) { e.preventDefault(); back(); } });
-    }
-    $$("[data-eval]").forEach(b => b.onclick = () => {
-      const r = +b.dataset.eval, before = S.evals.every(Boolean);
-      S.evals[r] = b.dataset.v; save();
-      if (before !== S.evals.every(Boolean)) { const y = window.scrollY; render(); window.scrollTo(0, y); }
-      else $$('[data-eval="' + r + '"]').forEach(x => x.setAttribute("aria-pressed", String(S.evals[r] === x.dataset.v)));
-    });
-    const refl = $("#refl"); if (refl) refl.addEventListener("input", () => { S.reflection = refl.value; save(); });
+    if (!t) return;
+    if (t.id === "pile") unplace(d.id, ghostRect);
+    else if (t.dataset.col === catOf(d.id)) { if (placeCard(d.id, t.dataset.col, +t.dataset.row, ghostRect)) say("Card placed."); }
   }
 
   // ---------- Checking, one flow at a time ----------
   async function check() {
-    if (busy || placed() < 15) return;
-    busy = true; selected = null;
-    for (const c of COLS) {
+    if (busy || placedCount() < 15 || S.phase !== "build") return;
+    busy = true; select(null); updateCheck();
+    const run = ++runId;
+    for (const c of FLOWS) {
       if (S.locked[c]) continue;
-      S.status[c] = "checking"; render(); await sleep(650);
+      S.status[c] = "checking"; updateFlow(c);
+      await sleep(420); if (run !== runId) return;
       const right = S.slots[c].filter((id, i) => id === c + i).length;
-      if (right === 5) { S.status[c] = ""; S.locked[c] = true; save(); render(); say(NAME[c] + ": correct."); await sleep(350); continue; }
+      if (right === 5) {
+        S.status[c] = ""; S.locked[c] = true; updateFlow(c); sync(); say(NAME[c] + ": correct!");
+        await sleep(200); if (run !== runId) return;
+        continue;
+      }
       S.status[c] = "no"; S.count[c] = right;
-      COLS.slice(COLS.indexOf(c) + 1).forEach(n => { if (!S.locked[n]) S.status[n] = ""; });
-      busy = false; save(); render();
-      say(NAME[c] + ": " + right + " of 5 cards are in the right place. Rearrange and check again.");
+      FLOWS.slice(FLOWS.indexOf(c) + 1).forEach(n => { if (!S.locked[n]) { S.status[n] = ""; updateFlow(n); } });
+      updateFlow(c); busy = false; sync();
+      say(NAME[c] + ": " + right + " of 5 correct. Try again.");
       return;
     }
-    busy = false; save(); render();
-    say("All three flows are correct. Now decide, for each stage, whether the proper process was followed.");
+    busy = false;
+    const y = window.scrollY;
+    S.phase = "eval"; save(); buildActivity(); window.scrollTo(0, y);
+    say("All three flows are correct. Compare the process and decide whether the proper process was followed at each stage.");
   }
 
-  $("#check").onclick = check;
+  // ---------- The returning arrow (Policy assessment back to Problem definition) ----------
+  function drawCycle() {
+    const board = $("#board"), g = $("#cyc"); if (!board || !g) return;
+    const b = board.getBoundingClientRect(), s0 = slotEl("p", 0).getBoundingClientRect(), s4 = slotEl("p", 4).getBoundingClientRect();
+    const xL = s0.left - b.left, gx = 9, r = 9;
+    const y0 = s0.top - b.top + s0.height / 2, y4 = s4.top - b.top + s4.height / 2;
+    const d = "M" + (xL - 1) + " " + y4 + " H" + (gx + r) + " Q" + gx + " " + y4 + " " + gx + " " + (y4 - r) + " V" + (y0 + r) + " Q" + gx + " " + y0 + " " + (gx + r) + " " + y0 + " H" + (xL - 4);
+    const my = (y0 + y4) / 2;
+    g.setAttribute("viewBox", "0 0 " + b.width + " " + b.height);
+    g.innerHTML = '<path d="' + d + '" fill="none" stroke="#5B7584" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M' + (xL - 11) + ' ' + (y0 - 6) + ' L' + (xL - 3) + ' ' + y0 + ' L' + (xL - 11) + ' ' + (y0 + 6) + '" fill="none" stroke="#5B7584" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<rect x="' + (gx - 7) + '" y="' + (my - 40) + '" width="14" height="80" fill="#E9EEF1"/>' +
+      '<text x="' + gx + '" y="' + my + '" transform="rotate(-90 ' + gx + ' ' + my + ')" text-anchor="middle" dominant-baseline="central" font-family="Calibri, Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#5B7584" letter-spacing=".04em">REPEATS</text>';
+  }
+  let ro = null;
+  function observeBoard() {
+    if (ro) ro.disconnect();
+    const board = $("#board"); if (!board || !window.ResizeObserver) return;
+    ro = new ResizeObserver(() => drawCycle()); ro.observe(board);
+  }
+  window.addEventListener("resize", drawCycle);
+
+  // keep the pile within the visible window, above the check button
+  let fitQueued = false;
+  function fitPile() {
+    const pile = $("#pile"); if (!pile) return;
+    const top = Math.max(pile.getBoundingClientRect().top, 56);
+    pile.style.maxHeight = Math.max(220, innerHeight - top - 80) + "px";
+  }
+  const queueFit = () => { if (!fitQueued) { fitQueued = true; requestAnimationFrame(() => { fitQueued = false; fitPile(); }); } };
+  window.addEventListener("scroll", queueFit, { passive: true });
+  window.addEventListener("resize", queueFit);
+
+  // ---------- Global ----------
   document.addEventListener("keydown", e => { if (e.key === "Escape" && selected) select(null); });
   document.addEventListener("click", e => { if (selected && !suppressClick && !e.target.closest(".card, .slot, #pile")) select(null); });
-  $("#reset").onclick = () => { if (confirm("Start over? This clears the board.")) { S = fresh(); selected = null; busy = false; save(); render(); window.scrollTo(0, 0); } };
+  const dlg = $("#confirm");
+  $("#reset").onclick = () => { if (dlg.showModal) dlg.showModal(); else if (confirm("Start over? This will clear your cards and responses.")) doReset(); };
+  $("#cancelReset").onclick = () => dlg.close();
+  $("#doReset").onclick = () => { dlg.close(); doReset(); };
+  function doReset() {
+    runId++; busy = false; selected = null; if (drag) cancelDrag();
+    try { sessionStorage.removeItem(KEY); } catch (e) {}
+    S = fresh(); Object.keys(cards).forEach(id => { cards[id].remove(); cards[id].style.translate = ""; });
+    showIntro(); window.scrollTo(0, 0);
+  }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawCycle);
-  render();
+  if (S.started) buildActivity(); else showIntro();
 })();
 </script>
 </body>
