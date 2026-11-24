@@ -6,194 +6,140 @@
 <title>Policy cycle activity · PH3020</title>
 <style>
   :root {
-    --navy: #002856; --teal: #007298; --tint: #EAF3F7; --orange: #F7941D;
-    --slate: #4F758B; --sky: #71B1C8; --ink: #1F2D36; --light: #CFE4ED;
-    --rust: #B4500A; --paper: #F4F7F9;
-    --should-bg: #E4F1F6; --should-bar: #007298;
-    --actual-bg: #FCEFE2; --actual-bar: #C9701E;
+    --navy: #002856; --teal: #007298; --orange: #F7941D; --rust: #B4500A;
+    --ink: #1F2D36; --slate: #4F758B; --sky: #71B1C8;
+    --table: #E8EDF0; --line: #A9BBC6;
+    --s-bg: #FFFFFF; --s-bar: #007298;
+    --a-bg: #FFF3E3; --a-bar: #D9761A;
     --head: Cambria, Georgia, "Times New Roman", serif;
     --body: Calibri, "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
-    --hdr: 52px;
+    --hdr: 50px;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
-  body { font-family: var(--body); color: var(--ink); background: var(--paper); font-size: 15px; line-height: 1.4; }
-  p, li, .ctext, .msg, textarea { text-wrap: pretty; }
+  body { font-family: var(--body); color: var(--ink); background: var(--table); font-size: 15px; line-height: 1.4; }
+  p, .ctext, textarea { text-wrap: pretty; }
   button { font: inherit; }
+  :focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
 
   /* ---------- Header ---------- */
-  header.bar { position: sticky; top: 0; z-index: 50; height: var(--hdr); background: var(--navy); color: #fff; display: flex; align-items: center; gap: 18px; padding: 0 20px; }
-  header.bar img { height: 13px; width: auto; display: block; flex: 0 0 auto; }
-  header.bar .sep { width: 1px; height: 22px; background: rgba(255,255,255,.25); }
-  header.bar .title { font-family: var(--head); font-size: 17px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  header.bar .right { margin-left: auto; display: flex; align-items: center; gap: 14px; white-space: nowrap; }
-  header.bar .course { font-size: 12px; letter-spacing: .07em; color: var(--light); text-transform: uppercase; }
-  header.bar .group { font-size: 13px; background: rgba(255,255,255,.12); border-radius: 999px; padding: 4px 12px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
-  header.bar .link { background: none; border: 0; color: var(--light); text-decoration: underline; cursor: pointer; font-size: 13px; padding: 0; }
+  header { position: sticky; top: 0; z-index: 50; height: var(--hdr); background: var(--navy); color: #fff; display: flex; align-items: center; gap: 16px; padding: 0 24px; box-shadow: 0 1px 6px rgba(0,0,0,.18); }
+  header img { height: 13px; width: auto; display: block; }
+  header .sep { width: 1px; height: 20px; background: rgba(255,255,255,.25); }
+  header .title { font-family: var(--head); font-weight: 700; font-size: 16px; white-space: nowrap; }
+  header .right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+  #check { border: 0; border-radius: 999px; padding: 8px 20px; font-weight: 700; font-size: 15px; background: var(--orange); color: #fff; cursor: pointer; }
+  #check:hover:not(:disabled) { background: #E2820F; }
+  #check:disabled { background: rgba(255,255,255,.14); color: rgba(255,255,255,.55); cursor: not-allowed; }
+  #check.ready { animation: nudge 1.6s ease-in-out 2; }
+  @keyframes nudge { 0%,100% { box-shadow: 0 0 0 0 rgba(247,148,29,0); } 50% { box-shadow: 0 0 0 7px rgba(247,148,29,.35); } }
+  #reset { background: none; border: 0; color: #BFD4DE; font-size: 13px; text-decoration: underline; cursor: pointer; padding: 0; }
 
-  /* ---------- Intro ---------- */
-  .intro { max-width: 880px; margin: 40px auto; background: #fff; border: 1px solid var(--light); border-radius: 12px; padding: 32px 36px; box-shadow: 0 2px 10px rgba(0,40,86,.06); }
-  .badge { display: inline-block; background: var(--orange); color: #fff; font-weight: 700; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; border-radius: 4px; }
-  .intro h1 { font-family: var(--head); color: var(--navy); font-size: 30px; line-height: 1.2; margin: 12px 0 14px; }
-  .intro .lead { font-size: 18px; margin: 0 0 12px; }
-  .intro .how { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0 22px; padding: 0; list-style: none; counter-reset: s; }
-  .intro .how li { counter-increment: s; background: var(--paper); border-radius: 8px; padding: 12px 12px 12px 44px; position: relative; font-size: 14.5px; }
-  .intro .how li::before { content: counter(s); position: absolute; left: 12px; top: 11px; width: 24px; height: 24px; border-radius: 50%; background: var(--navy); color: #fff; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; }
-  .intro .how b { display: block; color: var(--navy); }
-  .intro .row { display: flex; gap: 12px; align-items: flex-end; }
-  .intro label { display: block; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-  .intro .row > div { flex: 1; }
-  input[type=text], textarea { font: inherit; color: var(--ink); width: 100%; padding: 10px 12px; border: 1.5px solid #B9CFDA; border-radius: 6px; background: #fff; }
-  input:focus-visible, textarea:focus-visible, button:focus-visible, .card:focus-visible, .slot:focus-visible, .bank:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+  /* ---------- Canvas ---------- */
+  .canvas { max-width: 1720px; margin: 0 auto; padding: 22px 28px 48px; }
+  .intro { max-width: 1040px; margin: 0 0 18px; }
+  .intro h1 { font-family: var(--head); color: var(--navy); font-size: 27px; line-height: 1.2; margin: 0 0 8px; }
+  .intro p { margin: 0 0 6px; font-size: 16.5px; }
+  .intro .how { margin-top: 10px; font-size: 15px; color: var(--slate); }
 
-  .btn { font-weight: 700; border: 0; border-radius: 6px; padding: 10px 20px; cursor: pointer; background: var(--teal); color: #fff; min-height: 42px; }
-  .btn:hover:not(:disabled) { background: #005f7f; }
-  .btn:disabled { background: #A9BFCA; cursor: not-allowed; }
+  .table { display: grid; grid-template-columns: minmax(0, 1fr) 520px; gap: 30px; align-items: start; }
+  .table.no-pile { grid-template-columns: minmax(0, 1fr); }
 
-  /* ---------- Workspace ---------- */
-  .ws { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 18px; padding: 14px 20px 30px; align-items: start; }
-  .ws.no-bank { grid-template-columns: minmax(0, 1fr); }
-  .toolbar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; background: #fff; border: 1px solid var(--light); border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; }
-  .phases { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 13px; }
-  .phase { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; color: var(--slate); background: var(--paper); font-weight: 700; }
-  .phase .n { width: 18px; height: 18px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: #D5E1E8; color: var(--slate); font-size: 11px; }
-  .phase.now { background: var(--navy); color: #fff; }
-  .phase.now .n { background: var(--orange); color: #fff; }
-  .phase.past { color: var(--teal); }
-  .phase.past .n { background: var(--teal); color: #fff; }
-  .phase-arrow { color: #A9BFCA; font-size: 12px; }
-  .toolbar .spacer { flex: 1; }
-  .placed { font-size: 13.5px; color: var(--slate); font-weight: 700; }
-  .msg { font-size: 15px; padding: 10px 14px; border-radius: 8px; margin-bottom: 10px; border-left: 5px solid var(--slate); background: #fff; }
-  .msg.ok { border-left-color: var(--teal); background: var(--tint); }
-  .msg.no { border-left-color: var(--orange); background: #FEF4E8; }
-  .msg b { color: var(--navy); }
+  /* ---------- Board ---------- */
+  .board { position: relative; display: grid; column-gap: 0; row-gap: 0; }
+  .board.three { grid-template-columns: 46px 190px 40px minmax(0, 1fr) 40px minmax(0, 1fr); }
+  .board.four  { grid-template-columns: 46px 190px 40px minmax(0, 1fr) 40px minmax(0, 1fr) 28px 178px; }
+  .flowbox { grid-row: 1 / 11; margin: -10px -10px -12px; border-radius: 16px; transition: box-shadow .25s, background .25s; pointer-events: none; }
+  .flowbox.checking { box-shadow: 0 0 0 3px var(--sky); background: rgba(113,177,200,.08); }
+  .flowbox.attention { box-shadow: 0 0 0 3px var(--orange); background: rgba(247,148,29,.07); }
+  .flowbox.correct { background: rgba(0,114,152,.06); }
+  .fhead { padding: 0 2px 12px; position: relative; z-index: 1; }
+  .fhead .t { display: flex; align-items: center; gap: 7px; font-family: var(--head); font-weight: 700; font-size: 17px; color: var(--navy); line-height: 1.2; }
+  .fhead .st { min-height: 20px; margin-top: 3px; font-size: 14px; font-weight: 700; }
+  .fhead .st.no { color: var(--rust); }
+  .fhead .st.ok { color: var(--teal); }
+  .fhead .st.wait { color: var(--slate); font-weight: 400; font-style: italic; }
+  .fhead .st.eval { color: var(--slate); font-weight: 400; }
 
-  /* matrix */
-  .matrix { position: relative; display: grid; grid-template-columns: 180px minmax(0, 1fr) minmax(0, 1fr); column-gap: 14px; row-gap: 12px; background: #fff; border: 1px solid var(--light); border-radius: 10px; padding: 12px 14px 16px; }
-  .matrix.eval { grid-template-columns: 170px minmax(0, 1fr) minmax(0, 1fr) 168px; }
-  .band { grid-column: 1 / -1; border-radius: 8px; background: transparent; margin: -6px -8px; pointer-events: none; }
-  .band.alt { background: #F7FAFB; }
-  .colhead { display: flex; flex-direction: column; gap: 6px; padding: 2px 2px 6px; border-bottom: 2px solid var(--light); position: sticky; top: var(--hdr); background: #fff; z-index: 5; }
-  .colhead .t { display: flex; align-items: center; gap: 7px; font-family: var(--head); font-weight: 700; color: var(--navy); font-size: 16px; line-height: 1.2; }
-  .colhead .t svg { flex: 0 0 auto; }
-  .chip { align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 999px; border: 1.5px solid #C5D4DC; color: var(--slate); background: #fff; }
-  .chip.checking { border-color: var(--sky); color: var(--teal); background: var(--tint); }
-  .chip.revise { border-color: var(--orange); color: var(--rust); background: #FEF4E8; }
-  .chip.correct { border-color: var(--teal); color: #fff; background: var(--teal); }
-  .chip.eval { border-color: var(--navy); color: var(--navy); }
-  .chip.dots::after { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 0.8s infinite alternate; }
-  @keyframes pulse { from { opacity: .2; } to { opacity: 1; } }
+  .slot { position: relative; z-index: 1; min-height: 112px; border: 2px dashed var(--line); border-radius: 10px; background: rgba(255,255,255,.4); display: flex; transition: border-color .12s, background .12s, box-shadow .12s, opacity .12s; }
+  .slot.filled { border-color: transparent; background: transparent; }
+  .slot.can-drop { border-color: var(--teal); background: rgba(255,255,255,.7); }
+  .slot.over { border: 2px solid var(--teal); background: rgba(0,114,152,.1); box-shadow: 0 0 0 4px rgba(113,177,200,.4); }
+  .slot.no-drop { opacity: .4; }
+  .slot.select-target { border-color: var(--teal); cursor: pointer; background: rgba(255,255,255,.75); }
+  .slot.filled.select-target { box-shadow: 0 0 0 3px var(--sky); }
+  .num { grid-column: 1; align-self: start; justify-self: end; margin: 10px 10px 0 0; width: 24px; height: 24px; border-radius: 50%; background: #fff; color: var(--slate); border: 1.5px solid var(--line); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; }
+  .conn { align-self: center; height: 0; border-top: 2px dotted var(--line); margin: 0 6px; position: relative; z-index: 1; }
+  .arw { display: flex; justify-content: center; align-items: center; height: 38px; position: relative; z-index: 1; color: #8FA6B3; }
+  .arw svg { width: 16px; height: 26px; }
+  #cyc { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: visible; }
 
-  .slot { position: relative; flex: 1; min-height: 96px; border: 2px dashed #C5D4DC; border-radius: 8px; display: flex; align-items: stretch; transition: border-color .12s, background .12s, box-shadow .12s; }
-  .slot .ph { margin: auto; padding: 8px 10px; font-size: 13px; color: #8BA3B0; text-align: center; }
-  .slot .num { position: absolute; left: 8px; top: -9px; background: #fff; padding: 0 5px; font-size: 11px; font-weight: 700; color: var(--slate); letter-spacing: .06em; text-transform: uppercase; z-index: 1; }
-  .slot.filled { border: 0; }
-  .slot.can-drop { border-color: var(--teal); background: rgba(0,114,152,.05); }
-  .slot.over { border: 2px solid var(--teal); background: rgba(0,114,152,.12); box-shadow: 0 0 0 4px rgba(113,177,200,.35); }
-  .slot.filled.over { box-shadow: 0 0 0 4px rgba(113,177,200,.6); }
-  .slot.no-drop { opacity: .45; }
-  .slot.over-bad { box-shadow: 0 0 0 3px rgba(180,80,10,.45); }
-  .slot.select-target { border-color: var(--teal); cursor: pointer; background: rgba(0,114,152,.05); }
-  .slot.select-target.filled { box-shadow: 0 0 0 2px var(--sky); }
-  .cell { display: flex; flex-direction: column; position: relative; }
-  .cell .down { position: absolute; left: 50%; bottom: -13px; transform: translateX(-50%); width: 18px; height: 14px; color: #9DB5C2; z-index: 2; }
-  .cycle-note { grid-column: 1; font-size: 12px; color: var(--slate); text-align: center; margin-top: -4px; display: flex; align-items: center; justify-content: center; gap: 4px; }
-
-  /* evaluation cell */
-  .evalcell { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 6px 4px; }
-  .yn { display: flex; gap: 8px; }
-  .yn button { flex: 1; border: 1.5px solid #9DB5C2; background: #fff; color: var(--ink); border-radius: 6px; padding: 9px 0; font-weight: 700; cursor: pointer; }
-  .yn button:hover:not(:disabled) { border-color: var(--ink); }
+  /* Yes / No */
+  .yn { align-self: center; display: flex; gap: 8px; position: relative; z-index: 1; }
+  .yn button { flex: 1; border: 1.5px solid #9DB3C0; background: #fff; color: var(--ink); border-radius: 999px; padding: 10px 0; font-weight: 700; cursor: pointer; }
+  .yn button:hover { border-color: var(--ink); }
   .yn button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-  .yn button:disabled { cursor: default; }
 
   /* ---------- Cards ---------- */
-  .card { position: relative; width: 100%; border-radius: 8px; padding: 10px 12px 11px; background: #fff; box-shadow: 0 1px 2px rgba(0,40,86,.12), 0 2px 6px rgba(0,40,86,.08); cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; transition: box-shadow .12s, opacity .12s; display: flex; flex-direction: column; gap: 4px; }
-  .card:hover { box-shadow: 0 2px 4px rgba(0,40,86,.16), 0 6px 14px rgba(0,40,86,.12); }
-  .card .tag { display: flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
-  .card .grip { position: absolute; right: 7px; top: 9px; width: 10px; height: 16px; opacity: .45; }
-  .card .ctext { font-size: 14.5px; line-height: 1.38; padding-right: 16px; }
-  .card.p { background: var(--navy); color: #fff; justify-content: center; }
-  .card.p .ctext { font-family: var(--head); font-weight: 700; font-size: 16px; }
-  .card.p .tag { color: var(--sky); }
-  .card.s { background: var(--should-bg); border-left: 6px solid var(--should-bar); }
-  .card.s .tag { color: var(--teal); }
-  .card.a { background: var(--actual-bg); border-left: 6px dashed var(--actual-bar); }
-  .card.a .tag { color: var(--rust); }
-  .slot .card .tag { display: none; }
-  .card.selected { box-shadow: 0 0 0 3px var(--orange), 0 6px 14px rgba(0,40,86,.18); }
-  .card.drag-src { opacity: .3; }
-  .card.locked { cursor: default; box-shadow: none; }
-  .card .lock { position: absolute; right: 8px; top: 8px; width: 13px; height: 13px; opacity: .7; }
-  .ghost { position: fixed; z-index: 1000; pointer-events: none; transform: rotate(1.5deg) scale(1.02); box-shadow: 0 12px 28px rgba(0,40,86,.3) !important; opacity: .96; }
+  .card { position: relative; width: 100%; border-radius: 10px; padding: 12px 14px; box-shadow: 0 1px 2px rgba(0,40,86,.16), 0 4px 12px rgba(0,40,86,.12); cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; transition: box-shadow .15s, transform .15s, opacity .15s; }
+  .card:hover { box-shadow: 0 2px 4px rgba(0,40,86,.18), 0 10px 22px rgba(0,40,86,.16); }
+  .card .ic { position: absolute; top: 10px; right: 10px; opacity: .55; }
+  .card .ctext { font-size: 15px; line-height: 1.4; padding-right: 18px; }
+  .card.p { background: var(--navy); color: #fff; display: flex; align-items: center; }
+  .card.p .ctext { font-family: var(--head); font-weight: 700; font-size: 17px; }
+  .card.p .ic { color: var(--sky); opacity: .9; }
+  .card.s { background: var(--s-bg); border-top: 6px solid var(--s-bar); }
+  .card.s .ic { color: var(--teal); }
+  .card.a { background: var(--a-bg); border-top: 6px dashed var(--a-bar); }
+  .card.a .ic { color: var(--rust); }
+  .slot .card { transform: none !important; }
+  .slot .card.p { justify-content: center; text-align: center; }
+  .slot .card.p .ctext { padding: 0 14px; }
+  .card.selected { box-shadow: 0 0 0 3px var(--orange), 0 10px 22px rgba(0,40,86,.2); }
+  .card.drag-src { opacity: .25; }
+  .card.locked { cursor: default; box-shadow: 0 1px 2px rgba(0,40,86,.12); }
+  .card.locked:hover { box-shadow: 0 1px 2px rgba(0,40,86,.12); }
+  .ghost { position: fixed; z-index: 1000; pointer-events: none; transform: rotate(2deg) scale(1.03) !important; box-shadow: 0 16px 34px rgba(0,40,86,.32) !important; }
   body.dragging, body.dragging * { cursor: grabbing !important; }
 
-  /* ---------- Bank ---------- */
-  .bank { position: sticky; top: calc(var(--hdr) + 14px); max-height: calc(100vh - var(--hdr) - 28px); overflow: auto; background: #fff; border: 1px solid var(--light); border-radius: 10px; padding: 12px 12px 14px; transition: box-shadow .12s, border-color .12s; }
-  .bank h2 { font-family: var(--head); color: var(--navy); font-size: 17px; margin: 0 0 2px; }
-  .bank .sub { font-size: 12.5px; color: var(--slate); margin: 0 0 8px; }
-  .bank.can-drop { border-color: var(--teal); }
-  .bank.over { box-shadow: 0 0 0 4px rgba(113,177,200,.5); border-color: var(--teal); }
-  .bank.select-target { border-color: var(--teal); box-shadow: 0 0 0 2px var(--sky); cursor: pointer; }
-  .bsec { margin-top: 10px; }
-  .bsec h3 { display: flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--slate); margin: 0 0 6px; }
-  .bsec h3 .cnt { margin-left: auto; font-weight: 700; color: var(--slate); letter-spacing: 0; text-transform: none; }
-  .bsec .cards { display: flex; flex-direction: column; gap: 8px; }
-  .bsec .empty { font-size: 12.5px; color: #8BA3B0; font-style: italic; padding: 4px 2px; }
-  .bsec.p .cards { display: grid; grid-template-columns: 1fr 1fr; }
-  .bank .card.p .ctext { font-size: 14.5px; }
+  /* ---------- Pile ---------- */
+  #pile { display: flex; flex-wrap: wrap; gap: 16px; align-content: flex-start; align-items: flex-start; padding: 6px 4px 30px; min-height: 200px; border-radius: 16px; transition: box-shadow .15s, background .15s; }
+  #pile .card { width: calc(50% - 8px); }
+  #pile.can-drop { background: rgba(255,255,255,.35); }
+  #pile.over { box-shadow: 0 0 0 3px var(--sky); background: rgba(255,255,255,.5); }
+  #pile.select-target { box-shadow: 0 0 0 3px var(--sky); cursor: pointer; }
 
-  /* ---------- Reflection + done ---------- */
-  .panel { background: #fff; border: 1px solid var(--light); border-radius: 10px; padding: 18px 22px; margin-top: 14px; }
-  .panel h2 { font-family: var(--head); color: var(--navy); font-size: 21px; margin: 0 0 8px; }
-  .panel p { margin: 0 0 10px; font-size: 16px; max-width: 980px; }
-  .panel textarea { min-height: 110px; font-size: 15.5px; }
-  .panel .actions { display: flex; align-items: center; gap: 14px; margin-top: 12px; flex-wrap: wrap; }
-  .panel .need { font-size: 13.5px; color: var(--slate); }
-  .done { background: var(--navy); color: #fff; border-radius: 10px; padding: 18px 22px; margin-bottom: 12px; display: grid; grid-template-columns: auto 1fr; gap: 6px 22px; }
-  .done .big { font-family: var(--head); font-size: 24px; grid-column: 1 / -1; margin-bottom: 4px; }
-  .done .k { font-size: 12px; letter-spacing: .07em; text-transform: uppercase; color: var(--sky); font-weight: 700; padding-top: 3px; }
-  .done .v { font-size: 15.5px; }
-  .done .v span { display: inline-block; margin-right: 16px; }
+  /* ---------- Reflection ---------- */
+  .reflect { max-width: 1040px; margin: 34px 0 0; animation: rise .4s ease-out; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .reflect h2 { font-family: var(--head); color: var(--navy); font-size: 24px; margin: 0 0 8px; }
+  .reflect p { margin: 0 0 8px; font-size: 17px; }
+  .reflect textarea { width: 100%; min-height: 130px; font: inherit; font-size: 16px; color: var(--ink); padding: 12px 14px; border: 1.5px solid #B4C6D0; border-radius: 10px; background: #fff; margin-top: 4px; }
+  .reflect .end { margin-top: 10px; font-size: 15.5px; color: var(--slate); }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-  @media (max-width: 1100px) {
-    .ws { grid-template-columns: 1fr; }
-    .bank { position: static; max-height: none; }
-    .bsec .cards { display: grid; grid-template-columns: 1fr 1fr; }
-    .bsec.p .cards { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (max-width: 760px) {
-    .matrix, .matrix.eval { grid-template-columns: 1fr; }
-    .matrix > * { grid-column: 1 !important; grid-row: auto !important; }
-    .band, .cell .down { display: none; }
-    .colhead { position: static; }
-    .intro .how { grid-template-columns: 1fr 1fr; }
-    .intro .row { flex-direction: column; align-items: stretch; }
-    header.bar .title, header.bar .course { display: none; }
-  }
+  @media (max-width: 1320px) { .table { grid-template-columns: minmax(0, 1fr) 300px; } #pile .card { width: 100%; } .board.three, .board.four { grid-template-columns: 42px 160px 32px minmax(0, 1fr) 32px minmax(0, 1fr); } .board.four { grid-template-columns: 42px 160px 32px minmax(0, 1fr) 32px minmax(0, 1fr) 22px 150px; } }
+  @media (max-width: 980px) { .table { grid-template-columns: 1fr; } #pile .card { width: calc(50% - 8px); } header .title { display: none; } }
 </style>
 </head>
 <body>
-<header class="bar">
+<header>
   <img src="assets/hpu_wordmark_white.png" alt="Hawaiʻi Pacific University">
   <span class="sep" aria-hidden="true"></span>
-  <span class="title">Policy cycle activity: vaccine policy</span>
+  <span class="title">PH3020 · Policy cycle activity</span>
   <div class="right">
-    <span class="group" id="groupChip" hidden></span>
-    <span class="course">PH3020 · Fall 2026</span>
-    <button class="link" id="restart" type="button">Start over</button>
+    <button id="check" type="button">Check our board</button>
+    <button id="reset" type="button">Start over</button>
   </div>
 </header>
-<main id="app"></main>
+<main class="canvas" id="app"></main>
 <div class="sr" aria-live="polite" id="live"></div>
 
 <script>
 (function () {
   "use strict";
 
-  // ---------- Approved card content (wording locked; change only after review) ----------
+  // ---------- Approved card content (wording locked) ----------
   const STAGES = ["Problem definition", "Agenda setting", "Policy establishment", "Policy implementation", "Policy assessment"];
   const SHOULD = [
     "Ongoing monitoring of U.S. vaccine and disease data identifies a public health concern. Experts analyze the data to define the problem and identify potential solutions.",
@@ -212,280 +158,220 @@
 
   const COLS = ["p", "s", "a"];
   const TEXT = { p: STAGES, s: SHOULD, a: ACTUAL };
-  const NAME = { p: "Policy cycle", s: "What should happen", a: "What actually happened" };
-  const TAG = { p: "Policy stage", s: "What should happen", a: "What actually happened" };
-  const KEY = "ph3020-policy-cycle-v2";
+  const NAME = { p: "The policy cycle", s: "What should happen", a: "What actually happened" };
+  const KIND = { p: "Policy stage", s: "What should happen", a: "What actually happened" };
+  const GRIDCOL = { p: 2, s: 4, a: 6 };
+  const KEY = "ph3020-policy-cycle-v3";
 
-  // ---------- Icons ----------
-  const CYC = '<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/>';
+  const svg = (w, inner, sw) => '<svg width="' + w + '" height="' + w + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (sw || 2.2) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
   const IC = {
-    p: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + CYC + '</svg>',
-    s: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.5h6V4"/><path d="M9 10h6M9 14h6M9 18h4"/></svg>',
-    a: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
-    eval: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M5 7h14M5 7l-3 7h6zM19 7l-3 7h6z"/></svg>',
-    lock: '<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
-    lockChip: '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
-    grip: '<svg class="grip" viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="2.5" cy="2.5" r="1.5"/><circle cx="7.5" cy="2.5" r="1.5"/><circle cx="2.5" cy="8" r="1.5"/><circle cx="7.5" cy="8" r="1.5"/><circle cx="2.5" cy="13.5" r="1.5"/><circle cx="7.5" cy="13.5" r="1.5"/></svg>',
-    down: '<svg class="down" viewBox="0 0 18 14" fill="currentColor" aria-hidden="true"><path d="M2 2l7 9 7-9z"/></svg>'
+    p: '<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/>',
+    s: '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.5h6V4"/><path d="M9 10h6M9 14h6M9 18h4"/>',
+    a: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+    eval: '<path d="M12 3v18M5 7h14M5 7l-3 7h6zM19 7l-3 7h6z"/>'
   };
+  const DOWN = '<svg viewBox="0 0 16 26" aria-hidden="true"><path d="M8 1v19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M2 16l6 8 6-8" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-  // ---------- Helpers ----------
-  const $ = (sel, root) => (root || document).querySelector(sel);
-  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const $ = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const sleep = ms => new Promise(r => setTimeout(r, ms));
-  function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-  function shuffleNot(a) { let b; do { b = shuffle(a); } while (b.every((v, i) => v === a[i])); return b; }
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const catOf = id => id[0];
-  const idxOf = id => +id.slice(1);
   function say(t) { const l = $("#live"); l.textContent = ""; setTimeout(() => { l.textContent = t; }, 30); }
 
   function fresh() {
-    const S = { v: 2, screen: "intro", group: "", bankOrder: {}, slots: {}, status: {}, count: {}, locked: {},
-      evals: [null, null, null, null, null], reflection: "", submitted: false, submittedAt: "", msg: null, checks: 0 };
-    COLS.forEach(c => {
-      S.bankOrder[c] = shuffleNot([0, 1, 2, 3, 4].map(i => c + i));
-      S.slots[c] = [null, null, null, null, null];
-      S.status[c] = "unchecked"; S.count[c] = 0; S.locked[c] = false;
-    });
+    const ids = []; COLS.forEach(c => { for (let i = 0; i < 5; i++) ids.push(c + i); });
+    const S = { v: 3, pile: shuffle(ids), rot: {}, slots: {}, status: {}, count: {}, locked: {}, evals: [null, null, null, null, null], reflection: "" };
+    ids.forEach(id => { S.rot[id] = +(Math.random() * 2.4 - 1.2).toFixed(2); });
+    COLS.forEach(c => { S.slots[c] = [null, null, null, null, null]; S.status[c] = ""; S.count[c] = 0; S.locked[c] = false; });
     return S;
   }
   let S;
-  try { S = JSON.parse(localStorage.getItem(KEY)); if (!S || S.v !== 2) S = fresh(); } catch (e) { S = fresh(); }
-  COLS.forEach(c => { if (S.status[c] === "checking") S.status[c] = "unchecked"; });
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  try { S = JSON.parse(localStorage.getItem(KEY)); if (!S || S.v !== 3) S = fresh(); } catch (e) { S = fresh(); }
+  COLS.forEach(c => { if (S.status[c] === "checking") S.status[c] = ""; });
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 
-  let selected = null;   // card chosen with click or keyboard
-  let busy = false;      // true while columns are being checked
-  let focusAfter = null; // selector to refocus after a render
-
+  let selected = null, busy = false, focusAfter = null;
   const app = $("#app");
   const allLocked = () => COLS.every(c => S.locked[c]);
-  const placedCount = () => COLS.reduce((n, c) => n + S.slots[c].filter(Boolean).length, 0);
-  const inBank = c => S.bankOrder[c].filter(id => !S.slots[c].includes(id));
-  const phase = () => S.submitted ? 5 : allLocked() ? 3 : (COLS.some(c => S.status[c] !== "unchecked") ? 2 : 1);
+  const placed = () => COLS.reduce((n, c) => n + S.slots[c].filter(Boolean).length, 0);
+  const inPile = () => S.pile.filter(id => !S.slots[catOf(id)].includes(id));
+  const where = id => { const i = S.slots[catOf(id)].indexOf(id); return i === -1 ? null : i; };
+  const canMove = id => !busy && !S.locked[catOf(id)];
 
   // ---------- Moves ----------
-  function locate(id) { const i = S.slots[catOf(id)].indexOf(id); return i === -1 ? { where: "bank" } : { where: "slot", i }; }
-  function canEdit(id) { return !busy && !S.submitted && !S.locked[catOf(id)]; }
   function placeInSlot(id, col, i) {
-    if (catOf(id) !== col || S.locked[col] || busy || S.submitted) return false;
-    const from = locate(id), occupant = S.slots[col][i];
-    if (from.where === "slot" && from.i === i) return false;
-    if (from.where === "slot") S.slots[col][from.i] = occupant; // swap places (or leave the old spot empty)
-    S.slots[col][i] = id;                                       // a card displaced by a card from the bank returns to the bank
+    if (catOf(id) !== col || S.locked[col] || busy) return false;
+    const from = where(id), occ = S.slots[col][i];
+    if (from === i) return false;
+    if (from !== null) S.slots[col][from] = occ; // swap two cards on the board
+    S.slots[col][i] = id;                         // a card bumped by a card from the pile goes back to the pile
     save(); return true;
   }
-  function returnToBank(id) {
-    const c = catOf(id); if (S.locked[c] || busy || S.submitted) return false;
-    const i = S.slots[c].indexOf(id); if (i === -1) return false;
+  function toPile(id) {
+    const c = catOf(id), i = where(id);
+    if (S.locked[c] || busy || i === null) return false;
     S.slots[c][i] = null; save(); return true;
   }
   function moved() { selected = null; const y = window.scrollY; render(); window.scrollTo(0, y); }
 
-  // ---------- Rendering ----------
-  function cardHTML(id) {
-    const c = catOf(id), i = idxOf(id), locked = S.locked[c] || S.submitted, sel = selected === id;
-    return '<div class="card ' + c + (locked ? " locked" : "") + (sel ? " selected" : "") + '" data-id="' + id + '" tabindex="' + (locked ? "-1" : "0") + '" role="button" aria-pressed="' + sel + '"' +
-      ' aria-label="' + esc(TAG[c] + " card: " + TEXT[c][i] + (locked ? " (locked)" : "")) + '">' +
-      '<div class="tag">' + IC[c] + TAG[c] + '</div><div class="ctext">' + TEXT[c][i] + '</div>' + (locked ? IC.lock : IC.grip) + '</div>';
+  // ---------- Render ----------
+  function cardHTML(id, inSlot) {
+    const c = catOf(id), i = +id.slice(1), locked = S.locked[c], sel = selected === id;
+    const rot = inSlot ? "" : ' style="transform: rotate(' + S.rot[id] + 'deg)"';
+    return '<div class="card ' + c + (locked ? " locked" : "") + (sel ? " selected" : "") + '" data-id="' + id + '"' + rot +
+      ' tabindex="' + (locked ? -1 : 0) + '" role="button" aria-pressed="' + sel + '" aria-label="' + esc(KIND[c] + " card: " + TEXT[c][i]) + '">' +
+      '<span class="ic">' + svg(15, IC[c]) + '</span><div class="ctext">' + TEXT[c][i] + '</div></div>';
   }
-  function chipHTML(c) {
+  function statusHTML(c) {
     const st = S.status[c];
-    if (st === "correct") return '<span class="chip correct">' + IC.lockChip + 'Correct · locked</span>';
-    if (st === "checking") return '<span class="chip checking dots">Checking</span>';
-    if (st === "revise") return '<span class="chip revise">Needs revision · ' + S.count[c] + ' of 5 correct</span>';
-    return '<span class="chip">Not checked yet</span>';
+    if (st === "checking") return '<div class="st wait">Checking…</div>';
+    if (st === "no") return '<div class="st no">' + S.count[c] + ' of 5 in the right place</div>';
+    if (S.locked[c]) return '<div class="st ok">✓ Correct</div>';
+    return '<div class="st"></div>';
   }
+  function render() {
+    const done = allLocked(), pile = inPile(), showPile = pile.length > 0 && !done;
+    let h = '<section class="intro"><h1>Recent vaccine policy changes: who’s right?</h1>' +
+      '<p>The federal government says recent changes to national childhood vaccination policy were adopted following a careful review of the scientific evidence. Critics argue that the proper process was not followed and that the changes are not supported by science.</p>' +
+      '<p>Your group will apply what you’ve learned about the policy cycle to answer one question: <strong>Who’s right?</strong></p>' +
+      '<p class="how">' + (done
+        ? 'Your board is complete. Compare what should happen with what actually happened, and decide for each stage whether the proper process was followed.'
+        : 'Drag each card to its spot on the board, or click a card and then click a spot. Rearrange as often as you like. When all 15 cards are placed, check your board.') + '</p></section>';
 
-  function renderIntro() {
-    $("#groupChip").hidden = true;
-    app.innerHTML =
-      '<section class="intro">' +
-        '<span class="badge">In-class activity · Chapter 8</span>' +
-        '<h1>Recent vaccine policy changes: who’s right?</h1>' +
-        '<p class="lead">The federal government says recent changes to national childhood vaccination policy were adopted following a careful review of the scientific evidence. Critics argue that the proper process was not followed and that the changes are not supported by science.</p>' +
-        '<p class="lead">Your group will apply what you’ve learned about the policy cycle to answer one question: <strong>Who’s right?</strong></p>' +
-        '<ol class="how">' +
-          '<li><b>Build</b>Arrange all 15 cards in one matrix.</li>' +
-          '<li><b>Check</b>The app checks one column at a time.</li>' +
-          '<li><b>Evaluate</b>Decide, stage by stage, whether the proper process was followed.</li>' +
-          '<li><b>Reflect</b>Answer one final question as a group.</li>' +
-        '</ol>' +
-        '<div class="row"><div><label for="g">Group name</label>' +
-        '<input type="text" id="g" maxlength="50" autocomplete="off" placeholder="For example, the first names of everyone in your group" value="' + esc(S.group) + '"></div>' +
-        '<button class="btn" id="start">Start the activity</button></div>' +
-      '</section>';
-    const g = $("#g");
-    g.addEventListener("input", () => { S.group = g.value; save(); });
-    g.addEventListener("keydown", e => { if (e.key === "Enter") $("#start").click(); });
-    $("#start").onclick = () => { S.group = g.value.trim(); S.screen = "work"; save(); render(); window.scrollTo(0, 0); };
-  }
-
-  function renderWork() {
-    const chip = $("#groupChip"); chip.hidden = !S.group; chip.textContent = S.group ? "Group: " + S.group : "";
-    const ev = allLocked(), ph = phase();
-    const phases = ["Build", "Check", "Evaluate", "Submit"];
-    let h = '<div class="ws' + (ev ? " no-bank" : "") + '"><div class="main">';
-
-    if (S.submitted) {
-      const yes = S.evals.filter(v => v === "Yes").length;
-      h += '<section class="done" role="status"><div class="big">Your group has completed the activity. Get ready for the class discussion.</div>' +
-        '<div class="k">Group</div><div class="v">' + esc(S.group || "Our group") + '</div>' +
-        '<div class="k">Process followed?</div><div class="v">' + STAGES.map((s, i) => '<span>' + (i + 1) + '. ' + s + ': <b>' + S.evals[i] + '</b></span>').join("") + '</div>' +
-        '<div class="k">In short</div><div class="v">Your group said the proper process was followed at ' + yes + ' of 5 stages.</div></section>';
-    }
-
-    h += '<div class="toolbar"><div class="phases" aria-label="Activity progress">';
-    phases.forEach((p, i) => {
-      const n = i + 1, cls = n < ph ? "past" : n === ph ? "now" : "";
-      h += (i ? '<span class="phase-arrow" aria-hidden="true">▸</span>' : "") + '<span class="phase ' + cls + '"' + (cls === "now" ? ' aria-current="step"' : "") + '><span class="n">' + (cls === "past" ? "✓" : n) + '</span>' + p + '</span>';
-    });
-    h += '</div><span class="spacer"></span>';
-    if (!ev) {
-      const n = placedCount();
-      h += '<span class="placed">' + n + ' of 15 cards placed</span><button class="btn" id="check"' + (n < 15 || busy ? " disabled" : "") + '>Check our arrangement</button>';
-    }
-    h += '</div>';
-
-    const m = S.submitted ? null : (S.msg || { k: "", t: "<b>Build your matrix.</b> Drag each card from the card bank into its spot, or click a card and then click a spot. Work on the columns in any order, and rearrange as often as you like. When all 15 cards are placed, check your arrangement." });
-    if (m) h += '<div class="msg ' + m.k + '" role="status">' + m.t + '</div>';
-
-    h += '<div class="matrix' + (ev ? " eval" : "") + '" id="matrix">';
-    for (let r = 0; r < 5; r++) h += '<div class="band' + (r % 2 ? " alt" : "") + '" style="grid-row:' + (r + 2) + '"></div>';
-    COLS.forEach((c, ci) => { h += '<div class="colhead" style="grid-column:' + (ci + 1) + ';grid-row:1"><div class="t">' + IC[c] + NAME[c] + '</div>' + chipHTML(c) + '</div>'; });
-    if (ev) h += '<div class="colhead" style="grid-column:4;grid-row:1"><div class="t">' + IC.eval + 'Was the proper process followed?</div><span class="chip eval">' + (S.submitted ? "Submitted" : "Your group decides") + '</span></div>';
-
+    h += '<div class="table' + (showPile ? "" : " no-pile") + '"><div class="board ' + (done ? "four" : "three") + '" id="board">';
+    COLS.forEach(c => { h += '<div class="flowbox ' + (S.status[c] === "checking" ? "checking" : S.status[c] === "no" ? "attention" : S.locked[c] ? "correct" : "") + '" style="grid-column:' + GRIDCOL[c] + '"></div>'; });
+    COLS.forEach(c => { h += '<div class="fhead" style="grid-column:' + GRIDCOL[c] + ';grid-row:1"><div class="t">' + svg(16, IC[c], 2.4) + NAME[c] + '</div>' + statusHTML(c) + '</div>'; });
+    if (done) h += '<div class="fhead" style="grid-column:8;grid-row:1"><div class="t">' + svg(16, IC.eval, 2.4) + 'Proper process followed?</div><div class="st eval">Your group decides</div></div>';
     for (let r = 0; r < 5; r++) {
-      COLS.forEach((c, ci) => {
-        const id = S.slots[c][r], locked = S.locked[c] || S.submitted;
-        const what = c === "p" ? "a policy stage card" : c === "s" ? "a “should happen” card" : "an “actually happened” card";
-        const inner = id ? cardHTML(id) : '<span class="ph">Place ' + what + ' here</span>';
-        h += '<div class="cell" style="grid-column:' + (ci + 1) + ';grid-row:' + (r + 2) + '">' +
-          '<div class="slot' + (id ? " filled" : "") + '" data-col="' + c + '" data-row="' + r + '" tabindex="' + (locked || id ? "-1" : "0") + '" role="button" aria-label="' + esc(NAME[c] + ", row " + (r + 1) + (id ? "" : ", empty")) + '">' +
-          (c === "p" ? '<span class="num">Stage ' + (r + 1) + '</span>' : "") + inner + '</div>' + (c === "p" && r < 4 ? IC.down : "") + '</div>';
+      const row = 2 + r * 2;
+      h += '<div class="num" style="grid-row:' + row + '" aria-hidden="true">' + (r + 1) + '</div>';
+      COLS.forEach(c => {
+        const id = S.slots[c][r];
+        h += '<div class="slot' + (id ? " filled" : "") + '" data-col="' + c + '" data-row="' + r + '" style="grid-column:' + GRIDCOL[c] + ';grid-row:' + row + '"' +
+          ' tabindex="' + (id || S.locked[c] ? -1 : 0) + '" role="button" aria-label="' + esc(NAME[c] + ", stage " + (r + 1) + (id ? "" : ", empty spot")) + '">' + (id ? cardHTML(id, true) : "") + '</div>';
       });
-      if (ev) {
-        const v = S.evals[r], dis = S.submitted ? " disabled" : "";
-        h += '<div class="evalcell" style="grid-column:4;grid-row:' + (r + 2) + '"><div class="yn" role="group" aria-label="' + esc("Stage " + (r + 1) + ", " + STAGES[r] + ": was the proper process followed?") + '">' +
-          '<button type="button" data-eval="' + r + '" data-v="Yes" aria-pressed="' + (v === "Yes") + '"' + dis + '>Yes</button>' +
-          '<button type="button" data-eval="' + r + '" data-v="No" aria-pressed="' + (v === "No") + '"' + dis + '>No</button></div></div>';
+      h += '<div class="conn" style="grid-column:3;grid-row:' + row + '"></div><div class="conn" style="grid-column:5;grid-row:' + row + '"></div>';
+      if (done) {
+        const v = S.evals[r];
+        h += '<div class="yn" style="grid-column:8;grid-row:' + row + '" role="group" aria-label="' + esc("Stage " + (r + 1) + ", " + STAGES[r] + ": was the proper process followed?") + '">' +
+          '<button type="button" data-eval="' + r + '" data-v="Yes" aria-pressed="' + (v === "Yes") + '">Yes</button>' +
+          '<button type="button" data-eval="' + r + '" data-v="No" aria-pressed="' + (v === "No") + '">No</button></div>';
       }
+      if (r < 4) COLS.forEach(c => { h += '<div class="arw" style="grid-column:' + GRIDCOL[c] + ';grid-row:' + (row + 1) + '">' + DOWN + '</div>'; });
     }
-    h += '<div class="cycle-note" style="grid-row:7"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" aria-hidden="true">' + CYC + '</svg>Then the cycle repeats</div>';
+    h += '<svg id="cyc" aria-hidden="true"></svg></div>';
+    if (showPile) h += '<div id="pile" aria-label="Cards to place">' + pile.map(id => cardHTML(id, false)).join("") + '</div>';
     h += '</div>';
 
-    if (ev) {
-      const ro = S.submitted ? " readonly" : "";
-      h += '<section class="panel" id="reflect"><h2>Getting it right vs. doing it right</h2>' +
+    if (done && S.evals.every(Boolean)) {
+      h += '<section class="reflect"><h2>Getting it right vs. doing it right</h2>' +
         '<p>Sometimes we stumble upon the right answer by accident. There’s a reason your math teacher made you show your work.</p>' +
         '<p>Suppose the new vaccine policy turns out to be the best possible policy for improving public health. Does it still matter whether the proper process was followed in developing it?</p>' +
-        '<p><b>Explain why or why not.</b></p>' +
-        '<label class="sr" for="refl">Your group’s response</label><textarea id="refl" maxlength="1500" placeholder="Your group’s response"' + ro + '>' + esc(S.reflection) + '</textarea>';
-      if (!S.submitted) h += '<div class="actions"><button class="btn" id="submit">Submit our group’s work</button><span class="need" id="need"></span></div>';
-      h += '</section>';
+        '<p><strong>Explain why or why not.</strong></p>' +
+        '<label class="sr" for="refl">Your group’s thoughts</label><textarea id="refl" maxlength="2000" placeholder="Your group’s thoughts">' + esc(S.reflection) + '</textarea>' +
+        '<p class="end">Be ready to discuss your reasoning with the class.</p></section>';
     }
-    h += '</div>';
-
-    if (!ev) {
-      h += '<aside class="bank" id="bank" tabindex="-1" aria-label="Card bank"><h2>Card bank</h2><p class="sub">Drag a card into the matrix, or click it and then click a spot. To take a card out of the matrix, drag it back here.</p>';
-      COLS.forEach(c => {
-        const left = inBank(c);
-        h += '<div class="bsec ' + c + '"><h3>' + IC[c] + NAME[c] + '<span class="cnt">' + left.length + ' left</span></h3>' +
-          (left.length ? '<div class="cards">' + left.map(cardHTML).join("") + '</div>' : '<div class="empty">' + (S.locked[c] ? "Column correct and locked." : "All placed.") + '</div>') + '</div>';
-      });
-      h += '</aside>';
-    }
-    h += '</div>';
     app.innerHTML = h;
-    wire();
-    updateSubmit();
-    if (selected) markSelectTargets();
+
+    const chk = $("#check"), n = placed();
+    chk.hidden = done;
+    chk.disabled = n < 15 || busy;
+    chk.title = n < 15 ? "Place all 15 cards first" : "";
+    chk.classList.toggle("ready", n === 15 && !busy && !COLS.some(c => S.status[c] === "no"));
+
+    wire(); drawCycle();
+    if (selected) markTargets();
     if (focusAfter) { const el = $(focusAfter); if (el) el.focus({ preventScroll: true }); focusAfter = null; }
   }
-  function render() { (S.screen === "work" ? renderWork : renderIntro)(); }
 
-  // ---------- Click / keyboard selection ----------
-  function markSelectTargets() {
+  // The returning arrow: from the last stage back up to the first
+  function drawCycle() {
+    const board = $("#board"), g = $("#cyc"); if (!board || !g) return;
+    const b = board.getBoundingClientRect();
+    const s0 = $('.slot[data-col="p"][data-row="0"]').getBoundingClientRect();
+    const s4 = $('.slot[data-col="p"][data-row="4"]').getBoundingClientRect();
+    const xL = s0.left - b.left, gx = 10, y0 = s0.top - b.top + s0.height * 0.62, y4 = s4.top - b.top + s4.height * 0.5, r = 10;
+    const d = "M" + (xL - 2) + " " + y4 + " H" + (gx + r) + " Q" + gx + " " + y4 + " " + gx + " " + (y4 - r) + " V" + (y0 + r) + " Q" + gx + " " + y0 + " " + (gx + r) + " " + y0 + " H" + (xL - 9);
+    g.setAttribute("viewBox", "0 0 " + b.width + " " + b.height);
+    g.innerHTML = '<path d="' + d + '" fill="none" stroke="#8FA6B3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 6"/>' +
+      '<path d="M' + (xL - 12) + ' ' + (y0 - 6) + ' L' + (xL - 3) + ' ' + y0 + ' L' + (xL - 12) + ' ' + (y0 + 6) + '" fill="none" stroke="#8FA6B3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+  window.addEventListener("resize", drawCycle);
+
+  // ---------- Click / keyboard ----------
+  function markTargets() {
     $$(".select-target").forEach(e => e.classList.remove("select-target"));
-    const b = $("#bank"); if (b) { b.tabIndex = -1; b.removeAttribute("role"); }
+    const pile = $("#pile"); if (pile) { pile.tabIndex = -1; pile.removeAttribute("role"); }
     if (!selected) return;
     const c = catOf(selected);
     $$('.slot[data-col="' + c + '"]').forEach(s => { if (!s.querySelector('[data-id="' + selected + '"]')) { s.classList.add("select-target"); s.tabIndex = 0; } });
-    if (b && locate(selected).where === "slot") { b.classList.add("select-target"); b.tabIndex = 0; b.setAttribute("role", "button"); b.setAttribute("aria-label", "Card bank: return the selected card here"); }
+    if (pile && where(selected) !== null) { pile.classList.add("select-target"); pile.tabIndex = 0; pile.setAttribute("role", "button"); pile.setAttribute("aria-label", "Return the selected card to the pile"); }
   }
   function select(id) {
     selected = (selected === id || !id) ? null : id;
     $$(".card.selected").forEach(e => { e.classList.remove("selected"); e.setAttribute("aria-pressed", "false"); });
-    if (selected) {
-      const el = $('.card[data-id="' + selected + '"]'); if (el) { el.classList.add("selected"); el.setAttribute("aria-pressed", "true"); }
-      say("Card selected. Now choose a spot in the " + NAME[catOf(selected)] + " column.");
-    }
-    markSelectTargets();
+    if (selected) { const el = $('.card[data-id="' + selected + '"]'); if (el) { el.classList.add("selected"); el.setAttribute("aria-pressed", "true"); } say("Card selected. Choose a spot in " + NAME[catOf(selected)].toLowerCase() + "."); }
+    markTargets();
   }
-  // A click (or Enter) on a card: if another card from the same column is selected and this one sits in the matrix, swap them.
-  function activateCard(id) {
-    if (selected && selected !== id && catOf(selected) === catOf(id) && locate(id).where === "slot" && canEdit(id)) {
+  function activate(id) {
+    if (selected && selected !== id && catOf(selected) === catOf(id) && where(id) !== null && canMove(id)) {
       const sel = selected; focusAfter = '.card[data-id="' + sel + '"]';
-      if (placeInSlot(sel, catOf(id), locate(id).i)) { say("Cards swapped."); moved(); }
+      if (placeInSlot(sel, catOf(id), where(id))) { say("Cards swapped."); moved(); }
       return;
     }
-    if (canEdit(id)) select(id);
+    if (canMove(id)) select(id);
   }
 
-  // ---------- Pointer drag ----------
-  let drag = null, scrollTimer = null;
-  function onPointerDown(e) {
+  // ---------- Drag ----------
+  let drag = null, scrollTimer = null, suppressClick = false;
+  function onDown(e) {
     const card = e.target.closest(".card"); if (!card || e.button > 0) return;
-    const id = card.dataset.id; if (!canEdit(id)) return;
-    drag = { id, card, x0: e.clientX, y0: e.clientY, started: false };
-    window.addEventListener("pointermove", onPointerMove);
-    window.addEventListener("pointerup", onPointerUp);
-    window.addEventListener("pointercancel", cancelDrag);
+    if (!canMove(card.dataset.id)) return;
+    drag = { id: card.dataset.id, card, x0: e.clientX, y0: e.clientY, started: false };
+    window.addEventListener("pointermove", onMove); window.addEventListener("pointerup", onUp); window.addEventListener("pointercancel", cancel);
   }
-  function startDrag() {
-    const r = drag.card.getBoundingClientRect();
-    const g = drag.card.cloneNode(true); g.classList.add("ghost"); g.classList.remove("selected");
-    g.style.width = r.width + "px"; g.style.left = r.left + "px"; g.style.top = r.top + "px";
+  function start() {
+    const r = drag.card.getBoundingClientRect(), g = drag.card.cloneNode(true);
+    g.classList.add("ghost"); g.classList.remove("selected");
+    Object.assign(g.style, { width: r.width + "px", height: r.height + "px", left: r.left + "px", top: r.top + "px" });
     document.body.appendChild(g);
     Object.assign(drag, { ghost: g, dx: drag.x0 - r.left, dy: drag.y0 - r.top, started: true });
     drag.card.classList.add("drag-src"); document.body.classList.add("dragging");
     if (selected) select(null);
     const c = catOf(drag.id);
-    $$(".slot").forEach(s => s.classList.add(s.dataset.col === c ? "can-drop" : "no-drop"));
-    if (locate(drag.id).where === "slot") { const b = $("#bank"); if (b) b.classList.add("can-drop"); }
+    $$(".slot").forEach(s => { if (!S.locked[s.dataset.col]) s.classList.add(s.dataset.col === c ? "can-drop" : "no-drop"); });
+    const pile = $("#pile"); if (pile && where(drag.id) !== null) pile.classList.add("can-drop");
   }
-  function targetAt(x, y) { const el = document.elementFromPoint(x, y); return el ? (el.closest(".slot") || el.closest("#bank")) : null; }
-  function onPointerMove(e) {
+  const targetAt = (x, y) => { const el = document.elementFromPoint(x, y); return el ? (el.closest(".slot") || el.closest("#pile")) : null; };
+  function onMove(e) {
     if (!drag) return;
-    if (!drag.started) { if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 6) return; startDrag(); }
+    if (!drag.started) { if (Math.hypot(e.clientX - drag.x0, e.clientY - drag.y0) < 6) return; start(); }
     e.preventDefault();
     drag.ghost.style.left = (e.clientX - drag.dx) + "px"; drag.ghost.style.top = (e.clientY - drag.dy) + "px";
-    $$(".over, .over-bad").forEach(x => x.classList.remove("over", "over-bad"));
+    $$(".over").forEach(x => x.classList.remove("over"));
     const t = targetAt(e.clientX, e.clientY);
-    if (t) t.classList.add((t.id === "bank" ? t.classList.contains("can-drop") : t.dataset.col === catOf(drag.id)) ? "over" : "over-bad");
-    const v = e.clientY < 52 + 60 ? -14 : e.clientY > innerHeight - 60 ? 14 : 0;
+    if (t && t.classList.contains("can-drop")) t.classList.add("over");
+    const v = e.clientY < 50 + 70 ? -16 : e.clientY > innerHeight - 70 ? 16 : 0;
     clearInterval(scrollTimer); if (v) scrollTimer = setInterval(() => window.scrollBy(0, v), 16);
   }
-  function endDragVisuals() {
+  function endVisuals() {
     clearInterval(scrollTimer);
     if (drag && drag.ghost) drag.ghost.remove();
     document.body.classList.remove("dragging");
-    $$(".can-drop, .no-drop, .over, .over-bad, .drag-src").forEach(x => x.classList.remove("can-drop", "no-drop", "over", "over-bad", "drag-src"));
-    window.removeEventListener("pointermove", onPointerMove);
-    window.removeEventListener("pointerup", onPointerUp);
-    window.removeEventListener("pointercancel", cancelDrag);
+    $$(".can-drop, .no-drop, .over, .drag-src").forEach(x => x.classList.remove("can-drop", "no-drop", "over", "drag-src"));
+    window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerup", onUp); window.removeEventListener("pointercancel", cancel);
   }
-  function cancelDrag() { endDragVisuals(); drag = null; }
-  let suppressClick = false;
-  function onPointerUp(e) {
+  function cancel() { endVisuals(); drag = null; }
+  function onUp(e) {
     if (!drag) return;
-    const d = drag; endDragVisuals(); drag = null;
+    const d = drag; endVisuals(); drag = null;
     suppressClick = true; setTimeout(() => { suppressClick = false; }, 0);
-    if (!d.started) { activateCard(d.id); return; }
+    if (!d.started) { activate(d.id); return; }
     const t = targetAt(e.clientX, e.clientY); if (!t) return;
     let ok = false;
-    if (t.id === "bank") ok = returnToBank(d.id);
+    if (t.id === "pile") ok = toPile(d.id);
     else if (t.dataset.col === catOf(d.id)) ok = placeInSlot(d.id, t.dataset.col, +t.dataset.row);
     if (ok) { say("Card moved."); moved(); }
   }
@@ -493,77 +379,58 @@
   // ---------- Wiring ----------
   function wire() {
     $$(".card").forEach(c => {
-      c.addEventListener("pointerdown", onPointerDown);
-      c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); activateCard(c.dataset.id); } });
+      c.addEventListener("pointerdown", onDown);
+      c.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); activate(c.dataset.id); } });
     });
     $$(".slot").forEach(s => {
       const place = () => {
         if (!selected) return;
-        if (s.dataset.col !== catOf(selected)) { say("That card goes in the " + NAME[catOf(selected)] + " column."); return; }
+        if (s.dataset.col !== catOf(selected)) { say("That card belongs in " + NAME[catOf(selected)].toLowerCase() + "."); return; }
         const sel = selected; focusAfter = '.card[data-id="' + sel + '"]';
         if (placeInSlot(sel, s.dataset.col, +s.dataset.row)) { say("Card placed."); moved(); }
       };
       s.addEventListener("click", e => { if (suppressClick || e.target.closest(".card")) return; if (selected) { e.stopPropagation(); place(); } });
       s.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target === s) { e.preventDefault(); place(); } });
     });
-    const bank = $("#bank");
-    if (bank) {
-      const back = () => { if (selected && locate(selected).where === "slot") { const sel = selected; focusAfter = '.card[data-id="' + sel + '"]'; if (returnToBank(sel)) { say("Card returned to the bank."); moved(); } } };
-      bank.addEventListener("click", e => { if (suppressClick || e.target.closest(".card")) return; back(); });
-      bank.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target === bank) { e.preventDefault(); back(); } });
+    const pile = $("#pile");
+    if (pile) {
+      const back = () => { if (selected && where(selected) !== null) { const sel = selected; focusAfter = '.card[data-id="' + sel + '"]'; if (toPile(sel)) { say("Card returned to the pile."); moved(); } } };
+      pile.addEventListener("click", e => { if (suppressClick || e.target.closest(".card")) return; back(); });
+      pile.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target === pile) { e.preventDefault(); back(); } });
     }
-    const chk = $("#check"); if (chk) chk.onclick = runCheck;
     $$("[data-eval]").forEach(b => b.onclick = () => {
-      if (S.submitted) return;
-      S.evals[+b.dataset.eval] = b.dataset.v; save();
-      $$('[data-eval="' + b.dataset.eval + '"]').forEach(x => x.setAttribute("aria-pressed", String(x === b)));
-      updateSubmit();
+      const r = +b.dataset.eval, before = S.evals.every(Boolean);
+      S.evals[r] = b.dataset.v; save();
+      if (before !== S.evals.every(Boolean)) { const y = window.scrollY; render(); window.scrollTo(0, y); }
+      else $$('[data-eval="' + r + '"]').forEach(x => x.setAttribute("aria-pressed", String(S.evals[r] === x.dataset.v)));
     });
-    const refl = $("#refl");
-    if (refl && !S.submitted) refl.addEventListener("input", () => { S.reflection = refl.value; save(); updateSubmit(); });
-    const sub = $("#submit"); if (sub) sub.onclick = submit;
-  }
-  function updateSubmit() {
-    const sub = $("#submit"), need = $("#need"); if (!sub) return;
-    const missing = S.evals.filter(v => !v).length, wrote = S.reflection.trim().length > 0, ready = !missing && wrote;
-    sub.disabled = !ready;
-    need.textContent = ready ? "You can change your answers until you submit." :
-      [missing ? "answer Yes or No for all five stages" : "", wrote ? "" : "write your group’s response"].filter(Boolean).join(" and ").replace(/^./, x => x.toUpperCase()) + " to submit.";
+    const refl = $("#refl"); if (refl) refl.addEventListener("input", () => { S.reflection = refl.value; save(); });
   }
 
-  // ---------- Checking, one column at a time ----------
-  async function runCheck() {
-    if (busy || placedCount() < 15) return;
-    busy = true; selected = null; S.checks++;
-    const lockedNow = [];
+  // ---------- Checking, one flow at a time ----------
+  async function check() {
+    if (busy || placed() < 15) return;
+    busy = true; selected = null;
     for (const c of COLS) {
       if (S.locked[c]) continue;
-      S.status[c] = "checking"; S.msg = { k: "", t: "<b>Checking the " + NAME[c] + " column…</b>" }; render(); await sleep(700);
+      S.status[c] = "checking"; render(); await sleep(650);
       const right = S.slots[c].filter((id, i) => id === c + i).length;
-      if (right === 5) { S.status[c] = "correct"; S.locked[c] = true; S.count[c] = 5; lockedNow.push(NAME[c]); save(); render(); await sleep(300); continue; }
-      S.status[c] = "revise"; S.count[c] = right;
-      COLS.slice(COLS.indexOf(c) + 1).forEach(n => { if (!S.locked[n]) S.status[n] = "unchecked"; });
-      const lead = lockedNow.length ? "<b>" + lockedNow.join(" and ") + ": correct and locked.</b> " : "";
-      S.msg = { k: "no", t: lead + "<b>" + NAME[c] + ": " + right + " of 5 cards are in the right place.</b> The app won’t say which ones. Talk it over as a group, rearrange that column, and check again." };
-      busy = false; save(); render(); say(NAME[c] + ": " + right + " of 5 cards are in the right place.");
+      if (right === 5) { S.status[c] = ""; S.locked[c] = true; save(); render(); say(NAME[c] + ": correct."); await sleep(350); continue; }
+      S.status[c] = "no"; S.count[c] = right;
+      COLS.slice(COLS.indexOf(c) + 1).forEach(n => { if (!S.locked[n]) S.status[n] = ""; });
+      busy = false; save(); render();
+      say(NAME[c] + ": " + right + " of 5 cards are in the right place. Rearrange and check again.");
       return;
     }
-    busy = false;
-    S.msg = { k: "ok", t: "<b>All three columns are correct and locked.</b> Now compare what should happen with what actually happened at each stage. As a group, decide whether the proper process was followed, and choose Yes or No for each stage." };
-    save(); render(); say("All three columns are correct. Now evaluate each stage.");
+    busy = false; save(); render();
+    say("All three flows are correct. Now decide, for each stage, whether the proper process was followed.");
   }
 
-  function submit() {
-    if (S.submitted || S.evals.some(v => !v) || !S.reflection.trim()) return;
-    if (!confirm("Submit your group’s work? After you submit, your answers can’t be changed.")) return;
-    S.submitted = true; S.submittedAt = new Date().toISOString(); S.msg = null;
-    save(); render(); window.scrollTo({ top: 0, behavior: "smooth" }); say("Submitted. Your group has completed the activity.");
-  }
-
-  // ---------- Global ----------
+  $("#check").onclick = check;
   document.addEventListener("keydown", e => { if (e.key === "Escape" && selected) select(null); });
-  document.addEventListener("click", e => { if (selected && !suppressClick && !e.target.closest(".card, .slot, #bank")) select(null); });
-  $("#restart").onclick = () => { if (confirm("Start the activity over? Your group’s work will be cleared.")) { S = fresh(); selected = null; busy = false; save(); render(); window.scrollTo(0, 0); } };
+  document.addEventListener("click", e => { if (selected && !suppressClick && !e.target.closest(".card, .slot, #pile")) select(null); });
+  $("#reset").onclick = () => { if (confirm("Start over? This clears the board.")) { S = fresh(); selected = null; busy = false; save(); render(); window.scrollTo(0, 0); } };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawCycle);
   render();
 })();
 </script>
